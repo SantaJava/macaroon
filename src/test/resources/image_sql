@@ -1,0 +1,24 @@
+drop table images;
+
+
+
+create table images(
+	image_id NUMBER(20) PRIMARY KEY,
+	title VARCHAR2(20),
+	description VARCHAR2(100),
+	file_name VARCHAR2(50),
+	new_name VARCHAR2(50),
+	thumb_name VARCHAR2(50),
+	file_size NUMBER(20),
+	mime_type VARCHAR2(15),
+	reg_date date default SYSDATE
+)
+
+DROP SEQUENCE images_seq;
+
+CREATE SEQUENCE images_seq 
+    START WITH 1  
+    INCREMENT BY 1 ;  
+
+    commit
+    

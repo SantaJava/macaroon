@@ -12,7 +12,7 @@
 <tr>
 	<td style="width: 50px"><a href="image/${image.imageId}"
 		data-lightbox="roadtrip"> <img src="thumb/${image.imageId}"
-			width="150" alt="${image.title}" class="z-depth-2 rounded" />
+			width="150" alt="${image.title}" class=" rounded hoverable" />
 	</a></td>
 	<td>
 		<p>

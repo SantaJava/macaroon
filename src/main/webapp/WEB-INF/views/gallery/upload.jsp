@@ -26,7 +26,7 @@
 			<button type="submit" class="btn btn-primary btn-sm">
 				<i class="fa fa-check-circle mr-2"></i> Confirm
 			</button>
-			<a href="javascript:history.back()" class="btn btn-primary btn-md">Go Back</a>
+			<a href="javascript:history.back()" class="btn btn-primary btn-sm">Go Back</a>
 		</div>
 	</form:form>
 </div>

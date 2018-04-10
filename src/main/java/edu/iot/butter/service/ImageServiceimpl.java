@@ -67,6 +67,7 @@ public class ImageServiceimpl implements ImageService {
 		image.setFileSize(file.getSize());
 		image.setNewName(newName);
 		image.setThumbName(thumbName);
+		System.out.println(image);
 	}
 
 	private String saveImage(String fname, MultipartFile file) throws Exception {

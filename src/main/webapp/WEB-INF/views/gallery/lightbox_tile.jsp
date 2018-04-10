@@ -18,15 +18,15 @@
 
 		<fmt:formatDate value="${image.regDate}" pattern="yyyy-MM-dd"
 			var="regDate" />
-		<div class="col-md-4 col-sm-4 col-lg-4 view zoom">
-			
+		<div class="col-md-4 col-sm-4 col-lg-4">
+	
 				<a href="image/${image.imageId}" data-lightbox="roadtrip"> 
 				<img
 					src="thumb/${image.imageId}" alt="${image.title}" width="200"
-					alt="${image.title}" class="z-depth-2 rounded" />
+					alt="${image.title}" class=" rounded hoverable" />
 				</a>
+	
 			
-
 			<p>
 				<a href="download/${image.imageId}"> <i class="fa fa-download"></i>
 					${image.title}
