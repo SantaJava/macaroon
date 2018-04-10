@@ -1,13 +1,14 @@
 package edu.iot.butter.dao;
 
 import java.util.List;
-import java.util.Map;
+
+import edu.iot.butter.model.Pagination;
 
 public interface BaseDao<M, K> {	//Memberdao와 ImageDao의 모델 객체와 매개변수 타입이 다름
 	
 	int getCount() throws Exception;
 
-	List<M> selectList(Map map) throws Exception;
+	List<M> selectList(Pagination pagination) throws Exception;
 
 	M selectOne(K k) throws Exception;
 
@@ -16,4 +17,6 @@ public interface BaseDao<M, K> {	//Memberdao와 ImageDao의 모델 객체와 매
 	int update(M m) throws Exception;
 
 	int delete(K k) throws Exception;
+	
+	
 }

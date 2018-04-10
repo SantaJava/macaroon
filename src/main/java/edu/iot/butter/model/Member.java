@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
@@ -21,5 +20,4 @@ public class Member {
 	private int grade;
 	private Date regDate;
 	private Date updateDate;
-
 }

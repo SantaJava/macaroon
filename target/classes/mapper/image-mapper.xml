@@ -4,43 +4,46 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.iot.butter.dao.ImageDao">
-	<!-- SQL문과 태그를 매핑 -->
-	
-	<select id="getCount" resultType="int"><![CDATA[
+	<!-- 주석달기. CDATA안에는 sql문으로 인식. --><!--parcing 이 처리하지 못하게 막는것. -->
+	<select id="getCount" resultType="int"><![CDATA[ 
 		select count(*) as total from images
 	]]></select>
 
-	<!-- Member객체에 알아서 넣어주는데, CamelCase=true이므로 setcell_phone이 아니라 setCellPhone을 호출한다. -->
-	<select id="selectList" resultType="Image" parameterType="map"><![CDATA[
-		select image_id, title, description, file_name, thumb_name, 
-		 file_size, mime_type, reg_date from(
-		 select row_number() over (order by image_id) as seq, 
-		 image_id, title, description, file_name, thumb_name, file_size, mime_type, reg_date
-		 from images) where seq between #{start} and #{end}
+	<!-- Member 를 쓸 수 있는 이유는 alias를 지정해놨기 때문. 매퍼에서는 매개변수를 하나만 전달 가능한 데 이 때 두개의 
+		정보를 보내기 위해 모델 객체를 만드는데, 이를 대신해서 쓸 수 있는게 hashmap 대소문자 상관 없음 -->
+	<!--여기서 객체는 모델객체일 경우에 반드시 getter가 있어야 한다. -->
+	<select id="selectList" resultType="Image" parameterType="Pagination"><![CDATA[
+		select image_id,title,description,file_name,new_name,thumb_name,file_size,mime_type,reg_date from (
+		select row_number() over (order by image_id desc) as seq, 
+		image_id, title, description, file_name, new_name, thumb_name, file_size,mime_type,reg_date
+	from images
+		)where seq between #{start} and #{end}
 	]]></select>
 
-	<select id="selectOne" resultType="Image" parameterType="int"><![CDATA[
+	<!--select가 여러개의 결과를 리턴할 때는 List로 반환해준다. 이때 selectList를 써줘야 함. -->
+	<select id="selectOne" resultType="Image" parameterType="String"><![CDATA[
 		select * from images
 		where image_id = #{imageId}
 	]]></select>
 
-	<!-- CamelCase=true이므로 getcell_phone이 아니라 getCellPhone을 호출한다. -->
 	<insert id="insert" parameterType="Image"><![CDATA[
-		insert into images
-		(image_id, title, description, file_name, thumb_name, file_size, mime_type)
-		values(images_seq.nextval, #{title}, #{description}, #{fileName}, #{thumbName},
-		#{fileSize}, #{mimeType})
+	insert into images
+		(image_id,title,description,file_name,new_name,thumb_name,file_size,mime_type)
+		values(images_seq.nextval, #{title}, #{description}, #{fileName}, #{newName}, #{thumbName}, #{fileSize}, #{mimeType}
+		 )
 	]]></insert>
 
 	<update id="update" parameterType="Image"><![CDATA[
 		update images set
-		title=#{title},
-		description=#{description}
-		where image_id=#{imageId}
+			title = #{title}
+			description = #{description}
+		where image_id = #{imageId}	
 	]]></update>
+	<!-- 여기서 return 0 = 패스워드가 안맞다는 뜻. -->
 
-	<delete id="delete" parameterType="int"><![CDATA[
+	<delete id="delete" parameterType="String"><![CDATA[
 		delete from images
 		where image_id = #{imageId}
 	]]></delete>
+
 </mapper>	

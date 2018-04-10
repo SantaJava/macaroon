@@ -1,12 +1,33 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
-</body>
-</html>
+<!--JSTL-->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<div class="Login-form">
+	<div class="col-lg-6"> 
+		<h1>
+			<i class="fa fa-sign-in-alt"></i> Log In
+		</h1>
+		<form:form commandName="login">
+			<input type="hidden" name="url" value="${url}"></input>
+			<div>
+				<label for="userId">User ID </label> <input type="text"
+					name="userId" id="userId" required value="${userId}">
+			</div>
+			<div>
+				<label for="password">Password </label> <input type="password"
+					name="password" id="password" required>
+			</div>
+			<c:if test="${not empty error}">
+				<div class="error">${error}</div>
+			</c:if>
+			<div>
+				<input type="submit" value="Submit" class = "btn btn-primary btn-md">
+			</div>
+		</form:form>
+	</div>
+</div>
+

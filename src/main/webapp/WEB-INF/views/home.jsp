@@ -1,14 +1,17 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
-<h1>
-	Hello world!  
-</h1>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false"%>
 
-<P>  The time on the server is ${serverTime}. </P>
-</body>
-</html>
+<title>Home</title>
+
+<div class="container text-center">
+	
+	<P class = "container text-right"> ${serverTime}.</P>
+<!--  	<div class="container text-center">
+		<img src="resources/images/butter.png" width="200px">
+	</div> -->
+
+
+	<div>
+		<img src="resources/images/couple.jpg" width="400px">
+	</div>
+</div>
