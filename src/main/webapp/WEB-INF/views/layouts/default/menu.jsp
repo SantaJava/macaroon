@@ -61,10 +61,13 @@
 				<!--<c:if test = "${USER.grade==0}">-->
 				<!--</c:if>-->
 				<li class = "nav item">
-					<a href= "${root}admin/member/list">
-					admin </a>
+					<a href= "${root}admin/member/list"><i class = "fa fa-key"></i>
+					Admin  |</a>
 					</li>
-			
+				<li class = "nav item">
+					<a href= "${root}board/list"><i class = "fa fa-list"></i>
+					List </a>
+					</li>
 				</ul>
 		</div>
 </nav>

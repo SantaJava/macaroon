@@ -16,9 +16,24 @@
 		up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/"
 		cache-period="0" />
-		
-		
- 	<!-- this is for multipart/form-data. activated when request happens. have it before viewResolver. -->
+
+	<!-- default namespace에 정의되어있는 Interceptor -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/*" />
+			<mapping path="/gallery/*" />
+			<mapping path="/member/*" />
+			<mapping path="/board/create" />
+			<beans:ref bean="loginInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin/*" /> 
+			<beans:ref bean="adminInterceptor" />
+		</interceptor>
+	</interceptors>
+
+	<!-- this is for multipart/form-data. activated when request happens. have 
+		it before viewResolver. -->
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 

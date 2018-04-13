@@ -11,4 +11,6 @@ public class Login {
 	
 	@NotEmpty(message = "password is required.")
 	private String password;
+	
+	private String url; //with this, after login, move to : url. 
 }

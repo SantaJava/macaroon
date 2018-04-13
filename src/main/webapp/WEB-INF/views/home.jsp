@@ -12,6 +12,6 @@
 
 
 	<div>
-		<img src="resources/images/couple.jpg" width="400px">
+		<img src="resources/images/Magnolia-Bakery.jpg" width="50%">
 	</div>
 </div>

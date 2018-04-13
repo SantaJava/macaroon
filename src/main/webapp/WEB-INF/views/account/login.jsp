@@ -7,7 +7,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <div class="Login-form">
-	<div class="col-lg-6"> 
+	<div class="col-lg-6">
+		<c:if test="${not empty login.url}">
+			<div class="mt-4 mb-4">
+				<h4>login is needed. please log in.</h4>
+			</div>
+		</c:if>
+		<form:hidden path="url" />
+
 		<h1>
 			<i class="fa fa-sign-in-alt"></i> Log In
 		</h1>
@@ -25,7 +32,7 @@
 				<div class="error">${error}</div>
 			</c:if>
 			<div>
-				<input type="submit" value="Submit" class = "btn btn-primary btn-md">
+				<input type="submit" value="Submit" class="btn btn-primary btn-md">
 			</div>
 		</form:form>
 	</div>
