@@ -49,9 +49,9 @@
 
 	$(function() {
 		var sensor_values;
-		var api = "${root}api/sensor/";
+		var api = "${root}reply/";
 		
-		$.get(api, function(data){
+		$.post(api + "addTop", function(data){
 			showLineChart(data);
 			sensor_values = data;
 		})

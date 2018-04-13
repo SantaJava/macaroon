@@ -13,9 +13,9 @@
 	<!-- Member객체에 알아서 넣어주는데, CamelCase=true이므로 setcell_phone이 아니라 setCellPhone을 호출한다. -->
 	<select id="selectList" resultType="Member" parameterType="Pagination"><![CDATA[
 		select user_id, name, password, cell_phone, email, address,
-		 grade, reg_date, update_date from(
+		 grade, profile_pic reg_date, update_date from(
 		 select row_number() over (order by reg_date DESC) as seq, 
-		 user_id, name, password, cell_phone, email, address, grade, reg_date, update_date
+		 user_id, name, password, cell_phone, email, address, grade, profile_pic, reg_date, update_date
 		 from members) where seq between #{start} and #{end}
 	]]></select>
 
@@ -27,9 +27,9 @@
 	<!-- CamelCase=true이므로 getcell_phone이 아니라 getCellPhone을 호출한다. -->
 	<insert id="insert" parameterType="Member"><![CDATA[
 		insert into members
-		(user_id, name, password, cell_phone, email, address, grade)
+		(user_id, name, password, cell_phone, email, address, grade, profile_pic)
 		values(#{userId}, #{name}, #{password}, #{cellPhone}, #{email},
-		#{address}, 1)
+		#{address}, 1,#{profilePic})
 	]]></insert>
 
 	<update id="update" parameterType="Member"><![CDATA[
@@ -37,6 +37,7 @@
 		cell_phone=#{cellPhone},
 		email=#{email},
 		address=#{address},
+		profile_pic=#{profilePic},
 		update_date = sysdate
 		where user_id=#{userId} and password=#{password}
 	]]></update>
@@ -47,6 +48,7 @@
 		cell_phone=#{cellPhone},
 		email=#{email},
 		address=#{address},
+		profile_pic=#{profilePic},
 		update_date = sysdate
 		where user_id=#{userId}
 	]]></update>

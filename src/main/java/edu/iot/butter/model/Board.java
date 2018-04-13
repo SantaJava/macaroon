@@ -15,9 +15,9 @@ public class Board {
 	@NotEmpty(message = "Writer is needed.")	
 	private String writer;
 	@NotEmpty(message = "Password is needed")
-	private String password;
 	private String content;
 	private int readCnt;
+	private int replyCnt; //달린 댓글 수 
 	private List<Attachment> attachments; //board_id 로 조인되는 테이블의 결과가 들어오는 곳.
 	private Date regDate;
 	private Date updateDate;

@@ -18,6 +18,7 @@ public class Member {
 	private String email;
 	private String address;
 	private int grade;
+	private String profilePic;
 	private Date regDate;
 	private Date updateDate;
 }

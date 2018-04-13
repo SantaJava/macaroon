@@ -17,12 +17,12 @@
 	</select>
 	<!-- 목록용으로 content 컬럼은 제외 -->
 	<select id="selectList" parameterType="Pagination" resultType="Board">
-		SELECT board_id, title, writer, read_cnt, reg_date
+		SELECT board_id, title, writer, read_cnt, reply_cnt, reg_date
 		FROM (
 		SELECT
 		ROW_NUMBER() OVER (ORDER BY reg_date DESC) AS SEQ,
 		board_id, title,
-		writer, read_cnt, reg_date
+		writer, read_cnt, reply_cnt, reg_date
 		FROM boards
 		)
 		WHERE SEQ BETWEEN #{start} AND
@@ -33,9 +33,9 @@
 		keyColumn="board_id" keyProperty="boardId">
 		insert into boards
 		(board_id, title,
-		writer, password, read_cnt, content,
+		writer, password, read_cnt, reply_cnt, content,
 		reg_date, update_date)
-		values(BOARDS_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, 0,
+		values(BOARDS_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, 0, 0,
 		#{content}, sysdate, sysdate)
 	</insert>
 	<!--게시글 수정, 비밀번호를 아는 경우에 수정 가능 -->
@@ -55,11 +55,17 @@
 		read_cnt = read_cnt + 1
 		WHERE board_id=#{boardId}
 	</update>
+	
+	<update id="increaseReplyCnt" parameterType="int">
+		UPDATE boards SET
+		reply_cnt = reply_cnt + 1
+		WHERE board_id=#{boardId}
+	</update>
 
-	<!-- 게시글 삭제 , 비밀번호를 아는 경우에 수정 가능 -->
+	<!-- 게시글 삭제 본인이 작성한 글일 경우 삭제 가능.-->
 	<delete id="deleteByUser" parameterType="Board">
 		DELETE FROM boards
-		WHERE board_id=#{boardId} and password=#{password}
+		WHERE board_id=#{boardId} and user_id = #{userId}
 	</delete>
 	
 	<!-- 게시글 삭제 , 관리자 삭제 기능 -->

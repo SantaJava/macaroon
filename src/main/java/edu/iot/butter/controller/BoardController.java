@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import edu.iot.butter.model.Attachment;
 import edu.iot.butter.model.Board;
 import edu.iot.butter.model.Pagination;
+import edu.iot.butter.model.Reply;
 import edu.iot.butter.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -119,4 +120,5 @@ public class BoardController {
 		System.out.println(attachmentId);		
 		return service.deleteAttachment(attachmentId);
 	}
+	
 }

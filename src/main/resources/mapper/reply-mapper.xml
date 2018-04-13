@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.iot.butter.dao.ReplyDao">
+	<!-- 주석달기. CDATA안에는 sql문으로 인식. --><!--parcing 이 처리하지 못하게 막는것. -->
+
+	<select id="selectOne" parameterType="int" resultType="Reply">
+		SELECT *
+		FROM replies
+		WHERE reply_id=#{replyId}
+	</select>
+
+	<!-- 대댓글까지 전부다 나오는 것 리스트 -->
+	<select id="selectList" parameterType="int" resultType="Reply">
+		SELECT *
+		FROM replies
+		WHERE board_id=#{boardId}
+	</select>
+
+	<!-- 원댓글만 나오는 리스트 -->
+	<select id="selectTopList" parameterType="int" resultType="Reply">
+		SELECT *
+		FROM replies
+		WHERE board_id=#{boardId} and parent_reply is null
+	</select>
+
+	<!-- 댓글의 대댓글의 리스트를 추출 (재사용) -->
+	<select id="selectChildList" parameterType="int" resultType="Reply">
+		SELECT *
+		FROM replies
+		WHERE parent_id=#{replyId}
+	</select>
+
+
+	<insert id="insertTop" parameterType="Reply">
+		insert into replies
+		(reply_id,
+		board_id, writer, content, reg_date, parent_reply, like_cnt,
+		reply_cnt)
+		values (replies_SEQ.NEXTVAL, #{boardId}, #{writer},
+		#{content}, SYSDATE,null,0,0)
+	</insert>
+
+	<insert id="insert" parameterType="Reply">
+		insert into replies
+		(reply_id,board_id, writer, content, reg_date, parent_reply, like_cnt,
+		reply_cnt)values (replies_SEQ.NEXTVAL, #{boardId}, #{writer},
+		#{content}, SYSDATE,#{parentReply},0,0)
+	</insert>
+
+	<!--보드삭제할 때 첨부파일 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM replies
+		WHERE
+		board_id=#{boardId}
+	</delete>
+
+	<!--content를 null값으로 변경하여 삭제 표시 -->
+	<update id="deleteByUser" parameterType="int"><![CDATA[
+		update replies set
+			content = null
+		where reply_id = #{replyId}	
+	]]></update>
+
+	<!--게시글 수정, 비밀번호를 아는 경우에 수정 가능 -->
+	<update id="update" parameterType="Reply">
+		UPDATE replies SET
+		content =
+		#{content},
+		WHERE
+		reply_id=#{replyId}
+	</update>
+
+	<!-- increaseReplyCount 댓글을 새로 insert할때마다 parent reply에 댓글 수 +1 -->
+	<update id="increaseReplyCnt" parameterType="int">
+		UPDATE replies SET
+		reply_cnt = reply_cnt + 1
+		WHERE reply_id=#{replyId}
+	</update>
+
+	<!-- increaseLikeCount 좋아요를 누를 때마다 likecount +1 -->
+	<update id="increaseLikeCnt" parameterType="int">
+		UPDATE replies SET
+		like_cnt = like_cnt + 1
+		WHERE reply_id=#{replyId}
+	</update>
+
+</mapper>	

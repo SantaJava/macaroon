@@ -13,3 +13,5 @@ public class Password {
 	@NotEmpty(message = "password is required.")
 	private String newPassword;
 }
+
+
