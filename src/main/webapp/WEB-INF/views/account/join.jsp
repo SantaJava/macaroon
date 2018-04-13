@@ -42,9 +42,9 @@
 			<form:errors path="userId" element="div" cssClass="error" />
 		</p>
 		<button class="btn btn-primary btn-sm" id="check-btn">Check
-			User Id</button>	
-		<p><span id = "check-message"></span>
-			Name
+			User Id</button>
+		<p>
+			<span id="check-message"></span> Name
 			<form:input path="name" value="${member.name}" />
 			<form:errors path="name" element="div" cssClass="error" />
 		</p>
@@ -67,6 +67,10 @@
 			Address
 			<form:input path="address" value="${member.address}" />
 			<form:errors path="address" element="div" cssClass="error" />
+		</p>
+		<p>
+			Picture
+			<form:input path="profilePic" value="${member.profilePic}" />
 		</p>
 		<input type="submit" value="Submit" class="btn btn-primary btn-md">
 	</form:form>

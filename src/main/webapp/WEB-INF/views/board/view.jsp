@@ -5,7 +5,7 @@
 
 <c:url value="/" var="root" />
 <script>
-	function showLineChart(data) {
+	function showReply(data) {
 	/*	var labels = data.map(function(item) {
 			return item.id + 'hour';
 		})*/
@@ -48,13 +48,12 @@
 	}
 
 	$(function() {
-		var sensor_values;
+		//var sensor_values;
 		var api = "${root}reply/";
 		
-		$.post(api + "addTop", function(data){
-			showLineChart(data);
-			sensor_values = data;
-		})
+		//$.post(api + "addTop", function(data){
+		//	sensor_values = data;
+	//	})
 		/*$
 				.get(
 						api,
@@ -72,11 +71,17 @@
 						});*/
 	
 	
-	$('#add').click(function(e){
+	$('#addReply').click(function(e){
+		var sysdate = new Date();
+		
 		var data = {
-				id: 8,
-				type: "temperature",
-				value: 35 //필드 변수의 이름과 동일해야함. 
+				replyId: 8,
+				boardId: 0,
+				writer: "melissa",
+				content: "melissa is good",
+				likeCnt: 0,
+				replyCnt: 0			
+ //필드 변수의 이름과 동일해야함. 
 		};
 			
 	$.ajax({
@@ -86,14 +91,13 @@
 		
 		/*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)*/
 		
-		url : api,
+		url : api + "addTop",
 		type : 'post',
 		data : JSON.stringify(data),
 		contentType : 'application/json',
 		
 		success : function(result){
-			sensor_values.push(data);
-			showLineChart(sensor_values);
+			console.log("success");
 		}
 		
 	})		
@@ -176,9 +180,24 @@
 <hr />
 <div>${board.content}</div>
 
+
+<div class = "col-md-10">
+<input type = "text" id = "reply_content">
+</div>
+<div class="col-md-2">
+<button id = "addReply">addReply</button>
+</div>
+
+
 <button id="add">add</button>
 <button id="edit">edit</button>
 <button id="delete" data-target = "5">delete</button>
+
+
+
+
+
+
 <div id="sensor_panel"></div>
 <canvas id="lineChart"></canvas>
 

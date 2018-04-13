@@ -13,7 +13,7 @@
 	<!-- Member객체에 알아서 넣어주는데, CamelCase=true이므로 setcell_phone이 아니라 setCellPhone을 호출한다. -->
 	<select id="selectList" resultType="Member" parameterType="Pagination"><![CDATA[
 		select user_id, name, password, cell_phone, email, address,
-		 grade, profile_pic reg_date, update_date from(
+		 grade, profile_pic, reg_date, update_date from(
 		 select row_number() over (order by reg_date DESC) as seq, 
 		 user_id, name, password, cell_phone, email, address, grade, profile_pic, reg_date, update_date
 		 from members) where seq between #{start} and #{end}

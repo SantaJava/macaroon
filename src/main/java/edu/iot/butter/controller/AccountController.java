@@ -32,7 +32,7 @@ public class AccountController {
 	MemberService service;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginForm(Login login, @ModelAttribute("url") String url){
+	public String loginForm(Login login, @ModelAttribute("url") String url) {
 		login.setUrl(url);
 		return "account/login";
 	}
@@ -40,26 +40,25 @@ public class AccountController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginSubmit(@Valid Login login, BindingResult result, HttpSession session) throws Exception {
 
-		if(result.hasErrors()) return "account/login";
-		
-		Member member = service.checkLogin(login);
-//		if(member ==null) {
-//			result.reject("failLogin", "user-id or password is incorrect.");
-//			return "account/login";
-//		}		
+		// 유효성 검사 결과 실패
+		if (result.hasErrors())
+			return "account/login";
+
+		Member member = service.checkLogin(login); // 여기서 예외 발생(로그인 실패)하면 handleLoginError()호출됨
 		session.setAttribute("USER", member);
-		//System.out.println(member);
-		return "home";
+
+		String url = login.getUrl();
+		if (url != null && !url.isEmpty())
+			return "redirect:" + url;
+
+		return "redirect:/";
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/login";
 	}
-	
 
 	// 이경우 Ajox가 하는 거고 JSON으로 응답해야 하기 때문에 try/ catch필요.
 	@ResponseBody
@@ -82,19 +81,20 @@ public class AccountController {
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String submit(@Valid Member member, BindingResult result, RedirectAttributes ra) throws Exception {
-		
-		//join troubles.
+
+		// join troubles.
 		if (result.hasErrors())
 			return "account/join";
-		
-		//join succeeded.
+
+		// join succeeded.
 		service.create(member);
-		
-		//save it in the session and when redirected, send it and then when you refresh the page, it gets removes when request is changed.
-		ra.addFlashAttribute("member",member);	
+
+		// save it in the session and when redirected, send it and then when you refresh
+		// the page, it gets removes when request is changed.
+		ra.addFlashAttribute("member", member);
 		return "redirect:/join_success";
 	}
-	
+
 	@RequestMapping(value = "/join_success", method = RequestMethod.GET)
 	public String joinSuccess() {
 		return "account/join_success";
@@ -107,7 +107,7 @@ public class AccountController {
 
 	@ExceptionHandler(LoginFailException.class)
 	public String handleLoginException(HttpServletRequest request, Exception e) {
-		
+
 		request.setAttribute("login", new Login());
 		request.setAttribute("error", e.getMessage());
 		return "account/login";

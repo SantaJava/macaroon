@@ -6,35 +6,34 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<div class="Login-form">
-	<div class="col-lg-6">
-		<c:if test="${not empty login.url}">
-			<div class="mt-4 mb-4">
-				<h4>login is needed. please log in.</h4>
-			</div>
-		</c:if>
-		<form:hidden path="url" />
 
-		<h1>
-			<i class="fa fa-sign-in-alt"></i> Log In
-		</h1>
-		<form:form commandName="login">
-			<input type="hidden" name="url" value="${url}"></input>
-			<div>
-				<label for="userId">User ID </label> <input type="text"
-					name="userId" id="userId" required value="${userId}">
-			</div>
-			<div>
-				<label for="password">Password </label> <input type="password"
-					name="password" id="password" required>
-			</div>
-			<c:if test="${not empty error}">
-				<div class="error">${error}</div>
-			</c:if>
-			<div>
-				<input type="submit" value="Submit" class="btn btn-primary btn-md">
-			</div>
-		</form:form>
-	</div>
+<div class="login-form">
+	<c:if test="${not empty login.url}">
+		<div class="mt-4 mb-4">
+			<h4>Login is needed, please Log-In.</h4>
+		</div>
+	</c:if>
 </div>
-
+<h2>
+	<i class="fa fa-sign-in-alt"></i> Login
+</h2>
+<hr>
+<form:form commandName="login">
+	<form:hidden path="url" />
+	<div class="md-form">
+		<i class="fa fa-user prefix grey-text"></i> <label for="userId">User
+			ID</label>
+		<form:input path="userId" class="form-control" value="${login.userId}" />
+		<form:errors path="userId" cssClass="error" />
+	</div>
+	<div class="md-form">
+		<i class="fa fa-lock prefix grey-text"></i> <label for="password">Password</label>
+		<form:password path="password" class="form-control" />
+		<form:errors path="password" cssClass="error" />
+	</div>
+	<div class="md-form text-center">
+		<button type="submit" class="btn btn-primary">
+			<i class="fa fa-check"></i> Login
+		</button>
+	</div>
+</form:form>
