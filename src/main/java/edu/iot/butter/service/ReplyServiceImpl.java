@@ -53,4 +53,10 @@ public class ReplyServiceImpl implements ReplyService {
 		return false;
 	}
 
+	@Override
+	public boolean create(Reply reply) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
