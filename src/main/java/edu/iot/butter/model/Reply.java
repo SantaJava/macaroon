@@ -3,11 +3,14 @@ package edu.iot.butter.model;
 import java.util.Date;
 import java.util.List;
 
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reply {
 	
 	private int replyId;
@@ -18,6 +21,6 @@ public class Reply {
 	private int parentReply;
 	private int likeCnt;
 	private int replyCnt;
-	private List<Reply> replies; //대댓글 list 저장할 필드
+	private List<Reply> replies;
 }
 

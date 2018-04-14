@@ -13,26 +13,26 @@ import edu.iot.butter.service.ReplyService;
 @RestController
 @RequestMapping("/reply")
 public class ReplyController {
-	@Autowired
-	ReplyService service;
+   @Autowired
+   ReplyService service;
 
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public boolean insertReply(@RequestBody Reply reply) throws Exception {
-		// RequestBody : JSON인코딩을 해석해준다.
-		System.out.println(reply);
-		return service.create(reply, true);
-	}
-	
-	@Transactional	
-	@RequestMapping(value = "/addTop", method = RequestMethod.POST)
-	public boolean insertTopReply(@RequestBody Reply reply) throws Exception {
-		// RequestBody : JSON인코딩을 해석해준다.
-		System.out.println(reply);
-		System.out.println("success from addTop");
-		Boolean result = service.create(reply, false);
-		System.out.println(result);
-		return result;
-	}
+   @RequestMapping(value = "/add", method = RequestMethod.POST)
+   public boolean insertReply(@RequestBody Reply reply) throws Exception {
+      // RequestBody : JSON인코딩을 해석해준다.
+      System.out.println(reply);
+      return service.create(reply, true);
+   }
+   
+   @Transactional   
+   @RequestMapping(value = "/addTop", method = RequestMethod.POST)
+   public boolean insertTopReply(@RequestBody Reply reply) throws Exception {
+      // RequestBody : JSON인코딩을 해석해준다.
+      System.out.println(reply);
+      System.out.println("컨트롤러 동작");
+      boolean result = service.create(reply, false);
+      System.out.println(result);
+      return result;
+   }
 
 }

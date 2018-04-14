@@ -51,6 +51,11 @@
 		//var sensor_values;
 		var api = "${root}reply/";
 		
+	      $.ajaxSetup({
+	          type: 'POST',
+	          headers: { "cache-control": "no-cache" }
+	      });
+		
 		//$.post(api + "addTop", function(data){
 		//	sensor_values = data;
 	//	})
@@ -71,16 +76,18 @@
 						});*/
 	
 	
+						
 	$('#addReply').click(function(e){
-		var sysdate = new Date();
+		//var sysdate = new Date();
 		
-		var data = {
-				replyId: 8,
-				boardId: 0,
-				writer: "melissa",
-				content: "melissa is good",
-				likeCnt: 0,
-				replyCnt: 0			
+		var dataa = {
+				boardId: 2, 
+				writer: 'iw', 
+				content: 'mel is good.inwu.two', 
+				regDate: null, 
+				parentReply: 0,  
+				likeCnt: 0, 
+				replyCnt: 0,				
  //필드 변수의 이름과 동일해야함. 
 		};
 			
@@ -93,8 +100,9 @@
 		
 		url : api + "addTop",
 		type : 'post',
-		data : JSON.stringify(data),
+		data : JSON.stringify(dataa),
 		contentType : 'application/json',
+		cache: false,
 		
 		success : function(result){
 			console.log("success");
@@ -181,17 +189,17 @@
 <div>${board.content}</div>
 
 
-<div class = "col-md-10">
-<input type = "text" id = "reply_content">
+<div class="col-md-10">
+	<input type="text" id="reply_content">
 </div>
 <div class="col-md-2">
-<button id = "addReply">addReply</button>
+	<button id="addReply">addReply</button>
 </div>
 
 
 <button id="add">add</button>
 <button id="edit">edit</button>
-<button id="delete" data-target = "5">delete</button>
+<button id="delete" data-target="5">delete</button>
 
 
 
