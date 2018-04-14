@@ -79,15 +79,12 @@
 						
 	$('#addReply').click(function(e){
 		//var sysdate = new Date();
-		
+		var reply_content = $('#reply_content').val();
 		var dataa = {
-				boardId: 2, 
-				writer: 'iw', 
-				content: 'mel is good.inwu.two', 
-				regDate: null, 
-				parentReply: 0,  
-				likeCnt: 0, 
-				replyCnt: 0,				
+				boardId: ${board.boardId}, 
+				writer: '${USER.userId}', 
+				content: reply_content
+				
  //필드 변수의 이름과 동일해야함. 
 		};
 			
