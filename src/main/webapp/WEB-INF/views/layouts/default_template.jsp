@@ -85,6 +85,15 @@ background-color : #FDF3D3;
 .btn-primary {
     background-color:  #800080 !important;
 }
+
+#reply_content{
+	resize : none;
+	background-color : white;
+	height : 100px;
+	border : none;
+	
+}
+
 </style>
 
 </head>

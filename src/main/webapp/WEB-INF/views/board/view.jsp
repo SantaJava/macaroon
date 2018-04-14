@@ -2,53 +2,46 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:url value="/" var="root" />
-<script>
-	function showReply(data) {
-	/*	var labels = data.map(function(item) {
-			return item.id + 'hour';
-		})*/
-		
-		var labels = data.map(item=>item.id +'hour'); //람다식. 자바는 -> js는 =>
-		var values = data.map(item=>item.value);
-		
-	/*	var values = data.map(function(item) {
-			return item.value;
-		}) */
-		
-		lineChart(labels, values);
-	}
-	
-	
-	
 
-	function lineChart(labels, values) {
-		var ctxL = document.getElementById("lineChart").getContext('2d');
-		var myLineChart = new Chart(ctxL, {
-			type : 'line',
-			data : {
-				labels : labels,
-				datasets : [ {
-					label : "temperature change",
-					fillColor : "rgba(220,220,220,0.2)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
-					pointHighlightFill : "#fff",
-					pointHighlightStroke : "rgba(220,220,220,1)",
-					data : values
-				},
-				]
-			},
-			options: {
-				responsive: true
-			}
-		});
-	}
+
+<script>
+
+
+
+
 
 	$(function() {
-		//var sensor_values;
+		// 댓글 입력창
+		var textArea = 
+			$(`
+				<div class="row">
+				<div class="col-md-10">
+					<textarea id="reply_content" cols="40" rows="4"
+						placeholder="write a comment here"></textarea>
+					<br />
+				</div>
+				<div class="col-md-2">
+					<button id="addReply" class="btn btn-primary btn-sm">
+						<i class="fa fa-reply"></i> Reply
+					</button>
+				</div>
+				</div>
+			`);
+		
+		
+		$('.addSubReply').click(function(){
+			
+			console.log("clicked 서브리플라이");
+			
+			$(this).parent().children().addClass("replyPlus");
+			textArea.appendTo('.replyPlus');
+			
+		})
+		
+		
 		var api = "${root}reply/";
 		
 	      $.ajaxSetup({
@@ -89,10 +82,6 @@
 		};
 			
 	$.ajax({
-		/*url : api,
-		data : data,
-		type : "post",*/
-		
 		/*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)*/
 		
 		url : api + "addTop",
@@ -185,14 +174,48 @@
 <hr />
 <div>${board.content}</div>
 
-
-<div class="col-md-10">
-	<input type="text" id="reply_content">
+<div class="row">
+	<div class="col-md-10">
+		<textarea id="reply_content" cols="40" rows = "4" placeholder = "write a comment here"></textarea><br/>
+	</div>
+	<div class="col-md-2">
+		<button id="replySubmit" class = "btn btn-primary btn-sm"><i class = "fa fa-reply"></i>Submit</button>
+	</div>
 </div>
-<div class="col-md-2">
-	<button id="addReply">addReply</button>
-</div>
+<hr />
 
+<ul class="list-unstyled">
+
+	<c:forEach var="reply" items="${board.replies}">
+		<fmt:formatDate value="${reply.regDate}" pattern="yyyy-MM-dd hh:mm:ss"
+			var="regDate" />
+		<div class="media">
+			<img src="http://placehold.it/100x100">
+			<div class="media-body">
+				<div>
+					<ul>
+						<span class="mt-0 mb-1 font-weight-bold">${reply.writer}</span>
+						<span class="float-right">${regDate} &nbsp;&nbsp;
+							${reply.likeCnt}
+							<a href = "#" style ="color: red"><i class="far fa-heart"></i></a>
+						</span>
+					</ul>
+				</div>
+				<ul>${reply.content}
+				</ul>
+				<ul class="float-right">
+					<button class="btn btn-primary btn-sm addSubReply">reply</button>
+				</ul>
+			</div>
+		</div>
+		<hr />
+		<a href = "#">${reply.replyCnt} open</a>
+		<br>
+		<div id = "replyTextArea"></div>
+		<hr />
+	</c:forEach>
+
+</ul>
 
 <button id="add">add</button>
 <button id="edit">edit</button>
