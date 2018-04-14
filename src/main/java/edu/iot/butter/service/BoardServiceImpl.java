@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.iot.butter.dao.AttachmentDao;
 import edu.iot.butter.dao.BoardDao;
+import edu.iot.butter.dao.ReplyDao;
 import edu.iot.butter.model.Attachment;
 import edu.iot.butter.model.Board;
 import edu.iot.butter.model.Pagination;
@@ -22,6 +23,9 @@ public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	AttachmentDao attachmentDao;
+	
+	@Autowired
+	ReplyDao replyDao;
 
 	
 	
@@ -42,7 +46,8 @@ public class BoardServiceImpl implements BoardService {
 	public Board getBoard(int boardId) throws Exception {
 		dao.increaseReadCnt(boardId); // 조회수 올리기 (이부분이 update에 해당하기 때문에 Transactional이 필요.)
 		Board board = dao.selectOne(boardId); // 선택한 board반환.
-		board.setAttachments(attachmentDao.selectList(boardId)); // setAttachments.
+		board.setAttachments(attachmentDao.selectList(boardId));
+		board.setReplies(replyDao.selectTopList(boardId));// setAttachments.
 		return board;
 	}
 	
