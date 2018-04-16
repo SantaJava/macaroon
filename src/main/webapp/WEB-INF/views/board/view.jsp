@@ -9,20 +9,6 @@
 <script>
 
 
-function getRecentReply(writer){
-    $.get(api + writer, function(reply){
-          return reply;
-    });
-}
-
-function showTopReplies(replies){
-	   console.log("showTopReplies() 호출");
-	   console.log(replies.length);
-	   replies.forEach(function(reply){
-	       console.log("for문");
-	    });
-}
-
 
 	$(function() {
 		var api = "${root}reply/";
@@ -54,42 +40,21 @@ function showTopReplies(replies){
 		
 		
 	
-		
+		//헤더 캐쉬 새팅
 	      $.ajaxSetup({
 	          headers: { "cache-control": "no-cache" }
 	      });
-		
-		//$.post(api + "addTop", function(data){
-		//	sensor_values = data;
-	//	})
-		/*$
-				.get(
-						api,
-						function(data) { //결과값 : 배열. 
-							console.log(data);
-							data
-									.forEach(function(item, ix) {
-										showLineChart(data);
-
-										//forEach 첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
-										console.log(typeof item.time)
-										var str = `<p>\${item.id} : \${item.type}, \${item.value} \${item.time}</p>`;
-										$('#sensor_panel').append($(str));
-									});
-						});*/
 	
-	
-	
-						
-						
-						
+		//리플라이 추가하기 위한 텍스트창을 연다. - 여기서 submit까지 처리			
 	  $('#bottom').on('click','.addSubReply',function(e){
 		 var flag = $(this).data('flag');
+		 var current = $(this);
 		 var api = "${root}reply/";
 		 var parent = $(this).parent();
 		 var Rcontent = "";
 		 var reply_id = $(this).data('id');
 		 var parent_id = parent.find('.openReply').data('id');
+		 var ReplyCnt = $(this).data('replyCnt');
 		 
 			console.log("parent_id : " +parent_id);
 		console.log("clicked 서브리플라이");
@@ -144,9 +109,10 @@ function showTopReplies(replies){
 		         cache: false,
 		         
 		         success : function(result){
-		            alert(result);
-		            console.log("replySubmit success");
-		            history.go(0);
+		        	 	        	 
+		        	//텍스트창을 지우고 새로 넣은 창을 append한다.
+		        	//parent.find('.textAreaOpen').empty();
+		        	printReplies(reply_id,current);
 		         }	         
 		      });      			
 		});	
@@ -154,13 +120,17 @@ function showTopReplies(replies){
 		console.log(reply_content);
 		 $(this).data('flag', 'false');
 		
-	});					
+	});		
+		
+		
 						
-	/*					
+				
 						
-	$('#addReply').click(function(e){
+	$('.replySubmit').click(function(e){
 		var api = "${root}reply/";
 		//var sysdate = new Date();
+		var current = $(this);
+		var reply_id = $(this).data('id');
 		var reply_content = $('#reply_content').val();
 		var dataa = {
 				boardId: ${board.boardId}, 
@@ -171,7 +141,7 @@ function showTopReplies(replies){
 		};
 		
 		$.ajax({
-			/*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)
+		//api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)
 			
 			url : api + "addTop",
 			type : 'post',
@@ -180,42 +150,96 @@ function showTopReplies(replies){
 			cache: false,
 			
 			success : function(result){
-				console.log("success");
-				 var reply = getRecentReply(data.writer)
-				//map
+				
+				printReplies(replyId, current);
 			}
 			
 		})		
-		}); */
+		});
 		
-		 $('#bottom').on('click','.deleteReply',function(e){
-		        console.log("삭제 버튼 클릭");
-		        var replyId = $(this).data('id');
-		      //DB에서 제거
-		         $.ajax({
-		           url: api+replyId,
-		           type: 'delete',
-		           success: function(result){
-		              if(result){
-		                 console.log("DB에서 해당 댓글이 제거되었습니다.");
-		                 //화면 업데이트
-		                 $('.content[data-id="'+replyId+'"]').text("사용자에 의해 삭제된 댓글입니다.").addClass('text-muted');
-		                // $('.editReply[data-id="'+replyId+'"]').remove();
-		                 $('.deleteReply[data-id="'+replyId+'"]').remove();
-		              }
-		           }
-		        }); 
-		     });
+	
+	//리플라이 제거
+	 $('#bottom').on('click','.deleteReply',function(e){
+	        console.log("삭제 버튼 클릭");
+	        var replyId = $(this).data('id');
+	      //DB에서 제거
+	         $.ajax({
+	           url: api+replyId,
+	           type: 'delete',
+	           success: function(result){
+	              if(result){
+	                 console.log("DB에서 해당 댓글이 제거되었습니다.");
+	                 //화면 업데이트
+	                 $('.content[data-id="'+replyId+'"]').text("사용자에 의해 삭제된 댓글입니다.").addClass('text-muted');
+	                // $('.editReply[data-id="'+replyId+'"]').remove();
+	                 $('.deleteReply[data-id="'+replyId+'"]').remove();
+	              }
+	           }
+	        }); 
+	     });
 
+	
+	//리플라이 프린트해주는 함수
+	function printReplies(replyId, current){
+	var api = "${root}reply/" + replyId;
 		
+	 $.get(api,function(replies){ //결과값 : 배열.
+         console.log(replies);
+         
+	
+			var str = "";
+	 
+         replies.forEach(function(reply, ix){ //forEach  첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
+              console.log(reply);
+              str += `<div class="media mt-4">
+      			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
+      			<div class="media-body">
+      				<div>
+      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
+      					
+      					if("${USER.userId}"==reply.writer && reply.content != null){ 	
+			                     str += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
+			                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
+      					}
+								str +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
+			      						\${reply.likeCnt} <a href="#" style="color: red"><i
+			      							class="far fa-heart"></i></a>
+			      					</span>
+			      				</div>
+			      				<div>`;
+      					
+      				if(reply.content!=null){
+      					str+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
+      				}else{
+      					str+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
+      				}
+				
+	              	
+	             str+= `</div>
+      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-replyCnt = "\${reply.replyCnt}">\${reply.replyCnt}
+      					open</a>
+      				<button class="btn btn-primary btn-sm float-right addSubReply"
+      					data-id="\${reply.replyId}"  data-flag="true">reply</button>
+      					<div class="textAreaOpen"></div>
+      					<div class="children"></div>
+      				</li>
+      			</div>
+      		</div>`;
+            // $(str).appendTo('.replyArea');
+         });
+        current.parent().find('.children').append(str);
+	 });
+
+	}
+	
 		
-	// $('.openReply').click(function(e){
-	$('#bottom').on('click', '.openReply', function(e){
+	//리플라이 리스트를 가져온다.
+	$('#bottom').on('click', '.openReply', function(e){ 
 	var api = "${root}reply/";
 	var reply_id = $(this).data('id');
 	var parent = $(this).parent();
 	console.log(reply_id);
-	var api = api + reply_id
+	var api = api + reply_id;
 	var flag = $(this).data('flag');
 	console.log(flag);
 	
@@ -227,6 +251,9 @@ function showTopReplies(replies){
 		console.log(flag);
 		return true;
 	}
+	
+	
+	
 	
 	 $.get(api,function(replies){ //결과값 : 배열.
          console.log(replies);
@@ -261,7 +288,7 @@ function showTopReplies(replies){
 				
 	              	
 	             str+= `</div>
-      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true">\${reply.replyCnt}
+      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-replyCnt = "\${reply.replyCnt}">\${reply.replyCnt}
       					open</a>
       				<button class="btn btn-primary btn-sm float-right addSubReply"
       					data-id="\${reply.replyId}"  data-flag="true">reply</button>
@@ -389,7 +416,7 @@ function showTopReplies(replies){
 		<br />
 	</div>
 	<div class="col-md-2">
-		<button id="replySubmit" class="btn btn-primary btn-sm">
+		<button id="replySubmit" class="btn btn-primary btn-sm replySubmit">
 			<i class="fa fa-reply"></i>Submit
 		</button>
 	</div>
@@ -430,6 +457,7 @@ function showTopReplies(replies){
 					open</a>
 				<button class="btn btn-primary btn-sm float-right addSubReply"
 					data-id="${reply.replyId}" data-flag="true">reply</button>
+				<div class="textAreaOpen"></div>
 				<div class="children"></div>
 				</li>
 			</div>
