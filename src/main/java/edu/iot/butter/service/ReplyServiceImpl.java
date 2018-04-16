@@ -38,15 +38,13 @@ public class ReplyServiceImpl implements ReplyService {
 	@Transactional
 	@Override
 	public boolean update(Reply reply) throws Exception {
-
 		return dao.update(reply) == 1;
 	}
 
 	@Transactional
 	@Override
 	public boolean delete(Reply reply) throws Exception {
-
-		return false;
+		return dao.deleteByUser(reply.getReplyId()) == 1;
 	}
 
 	@Transactional
