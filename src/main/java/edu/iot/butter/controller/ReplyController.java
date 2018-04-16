@@ -1,7 +1,10 @@
 package edu.iot.butter.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,5 +37,18 @@ public class ReplyController {
       System.out.println(result);
       return result;
    }
-
+   
+   @RequestMapping(value = "/{replyId}", method = RequestMethod.GET)
+   public List<Reply> getList(@PathVariable int replyId){
+	   System.out.println("json getList 동작");
+	   List list = null;
+	   try {
+	   list =  service.getReplyList(replyId);
+	   System.out.println(list);
+	   }
+	   catch(Exception e) {
+		   e.printStackTrace();
+	   }
+	   return list;
+   }
 }

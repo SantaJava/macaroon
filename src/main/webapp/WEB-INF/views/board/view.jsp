@@ -10,10 +10,30 @@
 <script>
 
 
+function getRecentReply(writer){
+    $.get(api + writer, function(reply){
+          return reply;
+    });
+}
 
+function showTopReplies(replies){
+	   console.log("showTopReplies() 호출");
+	   console.log(replies.length);
+	   replies.forEach(function(reply){
+	       console.log("for문");
+	    });
+}
 
 
 	$(function() {
+		var api = "${root}reply/";
+			
+	/*	$.get(api, function(data){
+		      replies_values = data; //배열로 들어옴(자바스크립트는 list 없음)
+		      //showLineChart(replies_values);
+		      console.log(replies_values);
+		   });*/
+		
 		// 댓글 입력창
 		var textArea = 
 			$(`
@@ -36,16 +56,14 @@
 			
 			console.log("clicked 서브리플라이");
 			
-			$(this).parent().children().addClass("replyPlus");
+			$(this).parent().addClass("replyPlus");
 			textArea.appendTo('.replyPlus');
 			
 		})
 		
-		
-		var api = "${root}reply/";
+	
 		
 	      $.ajaxSetup({
-	          type: 'POST',
 	          headers: { "cache-control": "no-cache" }
 	      });
 		
@@ -71,6 +89,7 @@
 	
 						
 	$('#addReply').click(function(e){
+		var api = "${root}reply/";
 		//var sysdate = new Date();
 		var reply_content = $('#reply_content').val();
 		var dataa = {
@@ -80,25 +99,114 @@
 				
  //필드 변수의 이름과 동일해야함. 
 		};
+		
+		$.ajax({
+			/*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)*/
 			
-	$.ajax({
-		/*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)*/
+			url : api + "addTop",
+			type : 'post',
+			data : JSON.stringify(dataa),
+			contentType : 'application/json',
+			cache: false,
+			
+			success : function(result){
+				console.log("success");
+				 var reply = getRecentReply(data.writer)
+				//map
+			}
+			
+		})		
+		});
 		
-		url : api + "addTop",
-		type : 'post',
-		data : JSON.stringify(dataa),
-		contentType : 'application/json',
-		cache: false,
 		
-		success : function(result){
-			console.log("success");
-		}
 		
-	})		
+		
+	// $('.openReply').click(function(e){
+	$('#bottom').on('click', '.openReply', function(e){
+	var api = "${root}reply/";
+	var reply_id = $(this).data('id');
+	var parent = $(this).parent();
+	console.log(reply_id);
+	var api = api + reply_id
+	var flag = $(this).data('flag');
+	console.log(flag);
+	
+	if(flag === 'false'){
+		// parent.removeClass("replyArea");
+
+		parent.find('.children').empty();
+		$(this).data('flag', 'true');
+		console.log(flag);
+		return true;
+	}
+	
+	 $.get(api,function(replies){ //결과값 : 배열.
+         console.log(replies);
+         
+	 
+			var str = "";
+	 
+         replies.forEach(function(reply, ix){ //forEach  첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
+              console.log(reply);
+              str += `<div class="media mt-4">
+      			<img class =" d-flex mr-3" src="${root}src/main/resources/images/profile-icon.png">
+      			<div class="media-body">
+      				<div>
+      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span> <span
+      						class="float-right">\${reply.regDate} &nbsp;&nbsp;
+      						\${reply.likeCnt} <a href="#" style="color: red"><i
+      							class="far fa-heart"></i></a>
+      					</span>
+      				</div>
+      				<div>\${reply.content}</div>
+      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true">\${reply.replyCnt}
+      					open</a>
+      				<button class="btn btn-primary btn-sm float-right addSubReply"
+      					data-id="\${reply.replyId}">reply</button>
+      				<div class="children"></div>
+      				</li>
+      			</div>
+      		</div>`;
+            // $(str).appendTo('.replyArea');
+         });
+         parent.find('.children').append(str);
+	 });
+
+	 $(this).data('flag', 'false');
+		
+	/*$.ajax({
+			url : api,
+			type : 'get',
+			data : reply_id,
+
+			cache: false,
+			
+			success : function(replies) {
+				console.log("replyOpen성공");
+				var str = "";
+				str += "ID:" + replies.replyId;
+				console.log(replies.replyId);
+			},
+			
+			 error: function(xhr, textStatus, error){
+			      console.log(xhr.statusText);
+			      console.log(textStatus);
+			      console.log(error);
+			 }
+			
+		});*/
+		
+	
 	});
+		
+	
+	
+	
+			
+
 						
 
-						$('#edit').click(function(e){
+				/*		$('#edit').click(function(e){
 				
 									var data = sensor_values[4];
 									data.value = 20.0;
@@ -107,9 +215,9 @@
 						$.ajax({
 							/*url : api,
 							data : data,
-							type : "post",*/
+							type : "post",
 							
-							/*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)*/
+							api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)
 							
 							url : api,
 							//url : api + 4, //~/api/sensor/4
@@ -120,10 +228,7 @@
 								showLineChart(sensor_values);
 							}							
 						});							
-						});
-
-				
-						
+						});			
 						
 						
 	$('#delete').click(function(e){
@@ -140,7 +245,7 @@
 				}
 			}
 		});
-	});
+	}); */
 						
 	});
 </script>
@@ -176,46 +281,49 @@
 
 <div class="row">
 	<div class="col-md-10">
-		<textarea id="reply_content" cols="40" rows = "4" placeholder = "write a comment here"></textarea><br/>
+		<textarea id="reply_content" cols="40" rows="4"
+			placeholder="write a comment here"></textarea>
+		<br />
 	</div>
 	<div class="col-md-2">
-		<button id="replySubmit" class = "btn btn-primary btn-sm"><i class = "fa fa-reply"></i>Submit</button>
+		<button id="replySubmit" class="btn btn-primary btn-sm">
+			<i class="fa fa-reply"></i>Submit
+		</button>
 	</div>
 </div>
 <hr />
 
-<ul class="list-unstyled">
+<ul id="bottom" class="list-unstyled">
 
 	<c:forEach var="reply" items="${board.replies}">
 		<fmt:formatDate value="${reply.regDate}" pattern="yyyy-MM-dd hh:mm:ss"
 			var="regDate" />
-		<div class="media">
-			<img src="http://placehold.it/100x100">
+		<div class="media mt-4">
+			<img class =" d-flex mr-3" src="http://placehold.it/100x100">
 			<div class="media-body">
 				<div>
-					<ul>
-						<span class="mt-0 mb-1 font-weight-bold">${reply.writer}</span>
-						<span class="float-right">${regDate} &nbsp;&nbsp;
-							${reply.likeCnt}
-							<a href = "#" style ="color: red"><i class="far fa-heart"></i></a>
-						</span>
-					</ul>
+					<span class="mt-0 mb-1 font-weight-bold">${reply.writer}</span> <span
+						class="float-right">${regDate} &nbsp;&nbsp;
+						${reply.likeCnt} <a href="#" style="color: red"><i
+							class="far fa-heart"></i></a>
+					</span>
 				</div>
-				<ul>${reply.content}
-				</ul>
-				<ul class="float-right">
-					<button class="btn btn-primary btn-sm addSubReply">reply</button>
-				</ul>
+				<div>${reply.content}</div>
+				<a data-id="${reply.replyId}" class="openReply" data-flag="true">${reply.replyCnt}
+					open</a>
+				<button class="btn btn-primary btn-sm float-right addSubReply"
+					data-id="${reply.replyId}">reply</button>
+				<div class="children"></div>
+				</li>
 			</div>
 		</div>
-		<hr />
-		<a href = "#">${reply.replyCnt} open</a>
-		<br>
-		<div id = "replyTextArea"></div>
-		<hr />
+
+
 	</c:forEach>
+	<!--리스트 들어갈 자리  -->
 
 </ul>
+
 
 <button id="add">add</button>
 <button id="edit">edit</button>

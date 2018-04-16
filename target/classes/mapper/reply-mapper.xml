@@ -30,7 +30,7 @@
    <select id="selectChildList" parameterType="int" resultType="Reply">
       SELECT *
       FROM replies
-      WHERE parent_id=#{replyId}
+      WHERE parent_reply=#{replyId}
    </select>
 
    <insert id="insertTop" parameterType="Reply">
