@@ -30,7 +30,7 @@ var replyContentTag; //태그 자체를 저장
 	       //맨 위 게시물 댓글 등록창
 	       $('.topTextAreaContent').keyup(function(){
 	           var length = $(this).val().length;
-	           $(this).parent().find('.boardTextCounter').html(length + " / 140");
+	           $(this).parent().find('.counter').html(length + " / 140");
 	     });
 		
 		
@@ -53,16 +53,17 @@ var replyContentTag; //태그 자체를 저장
 		var textArea = 
 	         $(`
 	            <div class="subTextArea">
-	            <div>
-	               <textarea id="reply_content" class = "replyContent subTextAreaContent" cols="40" rows="4"
-	                  placeholder="write a comment here"></textarea>
-	               <br />
-	            </div>
-	            <div>
-	               <button id="submit" class="btn btn-primary btn-sm">
-	                  <i class="fa fa-reply"></i> submit
-	               </button>
-	            </div>
+	            <form class="caption-create" style="border:1px solid gray; position:relative; background-color:white;">
+	               <textarea id="reply_content" class = "replyContent subTextAreaContent" rows="40" cols="4" maxlength="140" style="resize:none;border:none;background-color:white;outline: none; overflow-y:hidden;">
+	               </textarea>
+	               <div style="text-align:right;">
+                   <span class="counter" >/140
+                   </span>
+		               <button id="submit" class="btn btn-primary btn-sm">
+		                  <i class="fa fa-reply"></i> submit
+		               </button>
+	               </div>
+	            </form>
 	            </div>
 	         `);
 		
