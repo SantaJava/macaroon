@@ -40,5 +40,6 @@
 	</div>
 	<a href = "changepassword" class = "btn btn-primary btn-sm" >Change Password</a> 
 	<a href = "edit" class = "btn btn-primary btn-sm"> Edit Profile</a> 	
+	<img src="avata/${member.userId}" alt="${member.userId}" width="100"/> 
 </div>
 
