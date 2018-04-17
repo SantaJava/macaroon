@@ -48,7 +48,7 @@ public class BoardServiceImpl implements BoardService {
 		dao.increaseReadCnt(boardId); // 조회수 올리기 (이부분이 update에 해당하기 때문에 Transactional이 필요.)
 		Board board = dao.selectOne(boardId); // 선택한 board반환.
 		board.setAttachments(attachmentDao.selectList(boardId));
-		board.setReplies(replyDao.selectTopList(boardId));// setAttachments.
+		board.setReplies(replyDao.selectTopList(boardId));//setreplies to board
 		
 		return board;
 	}

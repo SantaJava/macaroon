@@ -7,43 +7,35 @@
 <c:url value="/" var="root" />
 
 <script>
-
-
+	
+var replyContent; //댓글 내용을 통해서 명시
+var replyContentTag; //태그 자체를 저장
+	
+	
+	
 
 	$(function() {
-		var api = "${root}reply/";
-			
-	/*	$.get(api, function(data){
-		      replies_values = data; //배열로 들어옴(자바스크립트는 list 없음)
-		      //showLineChart(replies_values);
-		      console.log(replies_values);
-		   });*/
-		
-		// 댓글 입력창
-		var textArea = 
-			$(`
-				<div class="row">
-				<div class="col-md-10">
-					<textarea id="reply_content" cols="40" rows="4"
-						placeholder="write a comment here"></textarea>
-					<br />
-				</div>
-				<div class="col-md-2">
-					<button id="addReply" class="btn btn-primary btn-sm">
-						<i class="fa fa-reply"></i> Reply
-					</button>
-				</div>
-				</div>
-			`);
-		
-		
+		var api = "${root}reply/";	
 	
 		//헤더 캐쉬 새팅
 	      $.ajaxSetup({
 	          headers: { "cache-control": "no-cache" }
 	      });
 	
-		//리플라이 추가하기 위한 텍스트창을 연다. - 여기서 submit까지 처리			
+	      //그 외 댓글 등록창
+	       $('#bottom').on('keyup','.subTextAreaContent',function(e){
+	          var length = $(this).val().length;
+	           $(this).parent().find('.counter').html(length + " / 140");
+	     });
+	       //맨 위 게시물 댓글 등록창
+	       $('.topTextAreaContent').keyup(function(){
+	           var length = $(this).val().length;
+	           $(this).parent().find('.boardTextCounter').html(length + " / 140");
+	     });
+		
+		
+		
+		//서브 리플라이 추가하기 위한 텍스트창을 연다. - 여기서 submit까지 처리			
 	  $('#bottom').on('click','.addSubReply',function(e){
 		 var flag = $(this).data('flag');
 		 var current = $(this);
@@ -51,6 +43,7 @@
 		 var parent = $(this).parent();
 		 var Rcontent = "";
 		 var reply_id = $(this).data('id');
+		 var current_id = $(this).find('.openReply').data('id');
 		 var parent_id = parent.find('.openReply').data('id');
 		 var ReplyCnt = $(this).data('replyCnt');
 		 
@@ -59,13 +52,13 @@
 		
 		var textArea = 
 	         $(`
-	            <div class="row">
-	            <div class="col-md-10">
-	               <textarea id="reply_content" class = "replyContent" cols="40" rows="4"
+	            <div class="subTextArea">
+	            <div>
+	               <textarea id="reply_content" class = "replyContent subTextAreaContent" cols="40" rows="4"
 	                  placeholder="write a comment here"></textarea>
 	               <br />
 	            </div>
-	            <div class="col-md-2">
+	            <div>
 	               <button id="submit" class="btn btn-primary btn-sm">
 	                  <i class="fa fa-reply"></i> submit
 	               </button>
@@ -82,7 +75,16 @@
 			return true;
 		}
 		
-		parent.find('.textAreaOpen').append(textArea);
+		$('.subTextArea').remove();
+		//$('.textAreaOpen')
+		//$('.replyCnt[data-id="'+parent_id+'"]').text();
+		parent.find('.textAreaOpen').eq(0).append(textArea);
+		console.log("아 패런트 아이디!!! : " + parent_id);
+		//$('.textAreaOpen[data-id="'+parent_id+'"]').append(textArea);
+		
+		//$('.textAreaOpen[data-id="'+parent_id+'"]').append(textArea);
+		
+		
 		
 		$('#submit').click(function(){
 			 Rcontent = $(this).parent().parent().find('.replyContent').val();
@@ -106,10 +108,56 @@
 		         contentType : 'application/json',
 		         cache: false,
 		         
-		         success : function(result){
-		        	 	        	 
+		         success : function(reply){
+		        	 	        	 		
+		        	 
+		        	 strc = "";
+		     		strc += 
+		     			`<div class="media mt-4">
+		       			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
+		       			<div class="media-body">
+		       				<div>
+		       					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
+		       					
+		       					if("${USER.userId}"==reply.writer && reply.content != null){ 	
+		     		                     strc += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
+		     		                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
+		       					}
+		     							strc +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
+		     		      						\${reply.likeCnt} <a href="#" style="color: red"><i
+		     		      							class="far fa-heart"></i></a>
+		     		      					</span>
+		     		      				</div>
+		     		      				<div>`;
+		       					
+		       				if(reply.content!=null){
+		       					strc+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
+		       				}else{
+		       					strc+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
+		       				}
+		     			
+		                   	
+		                  strc+= `</div>
+		       				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-id = "\${reply.replyId}" class = "replyCnt">\${reply.replyCnt}
+		       				</span>open</a>
+		       				<button class="btn btn-primary btn-sm float-right addSubReply"
+		       					data-id="\${reply.replyId}"  data-flag="true">reply</button>
+		       					<div data-id = "\${reply.replyId}" class="textAreaOpen"></div>
+		       					<div class="children"></div>
+		       				</li>
+		       			</div>
+		       		</div>`;
+		        	 
+		        	 
+		        	 
 		        	//텍스트창을 지우고 새로 넣은 창을 append한다.
-		        	//parent.find('.textAreaOpen').empty();
+		        	parent.find('.textAreaOpen').empty();
+		        //	$('.addRecent[data-id="'+parent_id+'"]').append(strc);
+		   			var count = $('.replyCnt[data-id="'+parent_id+'"]').text();
+		   			$('.replyCnt[data-id="'+parent_id+'"]').text(parseInt(count)+1);
+		   			console.log("새로 만든 카운트 : " +count+ parent_id);
+		   			
+		   			
 		        	//printReplies(reply_id,current);
 		         }	         
 		      });      			
@@ -123,7 +171,7 @@
 		
 						
 				
-	//top reply print				
+	//top reply print 탑 리플라이 서브밋				
 	$('.replySubmit').click(function(e){
 		var api = "${root}reply/";
 		//var sysdate = new Date();
@@ -151,49 +199,50 @@
 			cache: false,
 			
 			success : function(reply){
-				var strc = " "
-				strc += 
-					`<div class="media mt-4">
-	      			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
-	      			<div class="media-body">
-	      				<div>
-	      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
-	      					
-	      					if("${USER.userId}"==reply.writer && reply.content != null){ 	
-				                     strc += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
-				                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
-	      					}
-									strc +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
-				      						\${reply.likeCnt} <a href="#" style="color: red"><i
-				      							class="far fa-heart"></i></a>
-				      					</span>
-				      				</div>
-				      				<div>`;
-	      					
-	      				if(reply.content!=null){
-	      					strc+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
-	      				}else{
-	      					strc+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
-	      				}
-					
-		              	
-		             strc+= `</div>
-	      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-replyCnt = "\${reply.replyCnt}">\${reply.replyCnt}
-	      					open</a>
-	      				<button class="btn btn-primary btn-sm float-right addSubReply"
-	      					data-id="\${reply.replyId}"  data-flag="true">reply</button>
-	      					<div class="textAreaOpen"></div>
-	      					<div class="children"></div>
-	      				</li>
-	      			</div>
-	      		</div>`;
+		    	 strc = "";
+		     		strc += 
+		     			`<div class="media mt-4">
+		       			<img class =" d-flex mr-3" src="http://placehold.it/100x100">
+		       			<div class="media-body">
+		       				<div>
+		       					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
+		       					
+		       					if("${USER.userId}"==reply.writer && reply.content != null){ 	
+		     		                     strc += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
+		     		                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
+		       					}
+		     							strc +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
+		     		      						\${reply.likeCnt} <a href="#" style="color: red"><i
+		     		      							class="far fa-heart"></i></a>
+		     		      					</span>
+		     		      				</div>
+		     		      				<div>`;
+		       					
+		       				if(reply.content!=null){
+		       					strc+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
+		       				}else{
+		       					strc+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
+		       				}
+		     			
+		                   	
+		                  strc+= `</div>
+		       				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-id = "\${reply.replyId}" class = "replyCnt">\${reply.replyCnt}
+		       				</span>open</a>
+		       				<button class="btn btn-primary btn-sm float-right addSubReply"
+		       					data-id="\${reply.replyId}"  data-flag="true">reply</button>
+		       					<div data-id = "\${reply.replyId}" class="textAreaOpen"></div>
+		       					<div class="children"></div>
+		       				</li>
+		       			</div>
+		       		</div>`;
+		        	 
 				
 					console.log("got heres");
 				  $('#children').prepend(strc);
 			}
 			
 		})		
-		});
+	});
 		
 	
 	//리플라이 제거
@@ -217,201 +266,82 @@
 	     });
 
 	
-	//리플라이 프린트해주는 함수
-	function printReplies(replyId, current){
-	var api = "${root}reply/" + replyId;
-		
-	 $.get(api,function(replies){ //결과값 : 배열.
-         console.log(replies);
-         
-	
-			var str = "";
-	 
-         replies.forEach(function(reply, ix){ //forEach  첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
-              console.log(reply);
-              str += `<div class="media mt-4">
-      			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
-      			<div class="media-body">
-      				<div>
-      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
-      					
-      					if("${USER.userId}"==reply.writer && reply.content != null){ 	
-			                     str += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
-			                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
-      					}
-								str +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
-			      						\${reply.likeCnt} <a href="#" style="color: red"><i
-			      							class="far fa-heart"></i></a>
-			      					</span>
-			      				</div>
-			      				<div>`;
-      					
-      				if(reply.content!=null){
-      					str+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
-      				}else{
-      					str+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
-      				}
-				
-	              	
-	             str+= `</div>
-      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-replyCnt = "\${reply.replyCnt}">\${reply.replyCnt}
-      					open</a>
-      				<button class="btn btn-primary btn-sm float-right addSubReply"
-      					data-id="\${reply.replyId}"  data-flag="true">reply</button>
-      					<div class="textAreaOpen"></div>
-      					<div class="children"></div>
-      				</li>
-      			</div>
-      		</div>`;
-            // $(str).appendTo('.replyArea');
-         });
-        current.find('.children').prepend(str);
-	 });
 
-	}
-	
 		
 	//리플라이 리스트를 가져온다.
 	$('#bottom').on('click', '.openReply', function(e){ 
-	var api = "${root}reply/";
-	var reply_id = $(this).data('id');
-	var parent = $(this).parent();
-	console.log(reply_id);
-	var api = api + reply_id;
-	var flag = $(this).data('flag');
-	console.log(flag);
-	
-	if(flag === 'false'){
-		// parent.removeClass("replyArea");
-		parent.find('.children').empty();
-		$(this).data('flag', 'true');
-		console.log(flag);
-		return true;
-	}
-	
-	
-	
-	
-	 $.get(api,function(replies){ //결과값 : 배열.
-         console.log(replies);
-         
-	
-			var str = "";
-	 
-         replies.forEach(function(reply, ix){ //forEach  첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
-              console.log(reply);
-              str += `<div class="media mt-4">
-      			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
-      			<div class="media-body">
-      				<div>
-      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
-      					
-      					if("${USER.userId}"==reply.writer && reply.content != null){ 	
-			                     str += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
-			                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
-      					}
-								str +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
-			      						\${reply.likeCnt} <a href="#" style="color: red"><i
-			      							class="far fa-heart"></i></a>
-			      					</span>
-			      				</div>
-			      				<div>`;
-      					
-      				if(reply.content!=null){
-      					str+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
-      				}else{
-      					str+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
-      				}
+			var api = "${root}reply/";
+			var reply_id = $(this).data('id');
+			var parent = $(this).parent();
+			console.log(reply_id);
+			var api = api + reply_id;
+			var flag = $(this).data('flag');
+			console.log(flag);
 				
-	              	
-	             str+= `</div>
-      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-replyCnt = "\${reply.replyCnt}">\${reply.replyCnt}
-      					open</a>
-      				<button class="btn btn-primary btn-sm float-right addSubReply"
-      					data-id="\${reply.replyId}"  data-flag="true">reply</button>
-      					<div class="textAreaOpen"></div>
-      					<div class="children"></div>
-      				</li>
-      			</div>
-      		</div>`;
-            // $(str).appendTo('.replyArea');
-         });
-         parent.find('.children').append(str);
-	 });
-	 $(this).data('flag', 'false');
-		
-	/*$.ajax({
-			url : api,
-			type : 'get',
-			data : reply_id,
-			cache: false,
 			
-			success : function(replies) {
-				console.log("replyOpen성공");
-				var str = "";
-				str += "ID:" + replies.replyId;
-				console.log(replies.replyId);
-			},
-			
-			 error: function(xhr, textStatus, error){
-			      console.log(xhr.statusText);
-			      console.log(textStatus);
-			      console.log(error);
-			 }
-			
-		});*/
-		
-	
-	});
-	
-	
-	
-			
-
-						
-
-				/*		$('#edit').click(function(e){
-				
-									var data = sensor_values[4];
-									data.value = 20.0;
-						
-								
-						$.ajax({
-							/*url : api,
-							data : data,
-							type : "post",
-							
-							api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)
-							
-							url : api,
-							//url : api + 4, //~/api/sensor/4
-							type : 'put', //수정은 put.
-							data : JSON.stringify(data),
-							contentType : 'application/json',							
-							success : function(result){
-								showLineChart(sensor_values);
-							}							
-						});							
-						});			
-						
-						
-	$('#delete').click(function(e){
-		var target = $(this).data('target');
-		$.ajax({
-			url : api + target, //예 : ~/api/sensor/5
-			type : 'delete',
-			success : function(result){
-				if(result){
-					var index = Number(target);
-					//배열의 index 번째 요소부터 1개 삭제
-					sensor_values.splice(target, 1);
-					showLineChart(sensor_values);
-				}
+			if(flag === 'false'){
+				// parent.removeClass("replyArea");
+				parent.find('.children').empty();
+				$(this).data('flag', 'true');
+				//console.log(flag);
+				return true;
 			}
-		});
-	}); */
+			
+			
+			
+			
+			 $.get(api,function(replies){ //결과값 : 배열.
+		         console.log(replies);
+		         
+			
+					var str = "";
+			 
+		         replies.forEach(function(reply, ix){ //forEach  첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
+		              console.log(reply);
+		              str += `<div class="media mt-4">
+		      			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
+		      			<div class="media-body">
+		      				<div>
+		      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
+		      					
+		      					if("${USER.userId}"==reply.writer && reply.content != null){ 	
+					                     str += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
+					                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
+		      					}
+										str +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
+					      						\${reply.likeCnt} <a href="#" style="color: red"><i
+					      							class="far fa-heart"></i></a>
+					      					</span>
+					      				</div>
+					      				<div>`;
+		      					
+		      				if(reply.content!=null){
+		      					str+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
+		      				}else{
+		      					str+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
+		      				}
 						
+			              	
+			             str+= `</div>
+		      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-id = "\${reply.replyId}" class = "replyCnt">\${reply.replyCnt}</span>
+		      					open</a>
+		      				<button class="btn btn-primary btn-sm float-right addSubReply"
+		      					data-id="\${reply.replyId}"  data-flag="true">reply</button>
+		      					<div class="textAreaOpen"></div>
+		      					<div data-id = "\${reply.replyId}"class = "recentAdd"></div>
+		      					<div class="children"></div>
+		      				</li>
+		      			</div>
+		      		</div>`;
+		            // $(str).appendTo('.replyArea');
+		         });
+		         parent.find('.children').append(str);
+			 });
+		$(this).data('flag', 'false');
 	});
+	
+	
+});
 </script>
 
 <h3 class="mt-5 mb-4">${board.title}</h3>
@@ -443,9 +373,9 @@
 <hr />
 <div>${board.content}</div>
 
-<div class="row">
+<div class="row topTextArea">
 	<div class="col-md-10">
-		<textarea id="reply_content" cols="40" rows="4"
+		<textarea id="reply_content" class = "topTextAreaContent" cols="40" rows="4"
 			placeholder="write a comment here"></textarea>
 		<br />
 	</div>
@@ -457,10 +387,10 @@
 	
 </div>
 <hr />
-<div id="children"></div>
+
 
 <ul id="bottom" class="list-unstyled">
-
+	<div id="children"></div>
 	<c:forEach var="reply" items="${board.replies}">
 		<fmt:formatDate value="${reply.regDate}" pattern="yyyy-MM-dd hh:mm:ss"
 			var="regDate" />
@@ -489,8 +419,8 @@
 						<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>
 					</c:otherwise>
 				</c:choose>
-				<a data-id="${reply.replyId}" class="openReply" data-flag="true">${reply.replyCnt}
-					open</a>
+				<a data-id="${reply.replyId}" class="openReply" data-flag="true"><span data-id = "${reply.replyId}" class = "replyCnt">${reply.replyCnt}
+				</span>	open</a>
 				<button class="btn btn-primary btn-sm float-right addSubReply"
 					data-id="${reply.replyId}" data-flag="true">reply</button>
 				<div class="textAreaOpen"></div>
