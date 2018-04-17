@@ -37,8 +37,6 @@
 			`);
 		
 		
-		
-		
 	
 		//헤더 캐쉬 새팅
 	      $.ajaxSetup({
@@ -112,7 +110,7 @@
 		        	 	        	 
 		        	//텍스트창을 지우고 새로 넣은 창을 append한다.
 		        	//parent.find('.textAreaOpen').empty();
-		        	printReplies(reply_id,current);
+		        	//printReplies(reply_id,current);
 		         }	         
 		      });      			
 		});	
@@ -125,13 +123,16 @@
 		
 						
 				
-						
+	//top reply print				
 	$('.replySubmit').click(function(e){
 		var api = "${root}reply/";
 		//var sysdate = new Date();
 		var current = $(this);
 		var reply_id = $(this).data('id');
 		var reply_content = $('#reply_content').val();
+		var reply_writer = '${USER.userId}';
+		var reply_cnt = 0;
+		var like_cnt = 0;
 		var dataa = {
 				boardId: ${board.boardId}, 
 				writer: '${USER.userId}', 
@@ -149,9 +150,46 @@
 			contentType : 'application/json',
 			cache: false,
 			
-			success : function(result){
+			success : function(reply){
+				var strc = " "
+				strc += 
+					`<div class="media mt-4">
+	      			<img class =" d-flex mr-3" src="http://placehold.it/50x50">
+	      			<div class="media-body">
+	      				<div>
+	      					<span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
+	      					
+	      					if("${USER.userId}"==reply.writer && reply.content != null){ 	
+				                     strc += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
+				                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
+	      					}
+									strc +=	`<span class="float-right">\${reply.regDate} &nbsp;&nbsp;
+				      						\${reply.likeCnt} <a href="#" style="color: red"><i
+				      							class="far fa-heart"></i></a>
+				      					</span>
+				      				</div>
+				      				<div>`;
+	      					
+	      				if(reply.content!=null){
+	      					strc+=`<div class="content" data-id="\${reply.replyId}">\${reply.content}</div>`;
+	      				}else{
+	      					strc+=`<div class="text-muted">사용자에 의해 삭제된 댓글입니다.</div>`;
+	      				}
+					
+		              	
+		             strc+= `</div>
+	      				<a data-id="\${reply.replyId}" class="openReply" data-flag="true"><span data-replyCnt = "\${reply.replyCnt}">\${reply.replyCnt}
+	      					open</a>
+	      				<button class="btn btn-primary btn-sm float-right addSubReply"
+	      					data-id="\${reply.replyId}"  data-flag="true">reply</button>
+	      					<div class="textAreaOpen"></div>
+	      					<div class="children"></div>
+	      				</li>
+	      			</div>
+	      		</div>`;
 				
-				printReplies(replyId, current);
+					console.log("got heres");
+				  $('#children').prepend(strc);
 			}
 			
 		})		
@@ -227,7 +265,7 @@
       		</div>`;
             // $(str).appendTo('.replyArea');
          });
-        current.parent().find('.children').append(str);
+        current.find('.children').prepend(str);
 	 });
 
 	}
@@ -245,7 +283,6 @@
 	
 	if(flag === 'false'){
 		// parent.removeClass("replyArea");
-
 		parent.find('.children').empty();
 		$(this).data('flag', 'true');
 		console.log(flag);
@@ -301,14 +338,12 @@
          });
          parent.find('.children').append(str);
 	 });
-
 	 $(this).data('flag', 'false');
 		
 	/*$.ajax({
 			url : api,
 			type : 'get',
 			data : reply_id,
-
 			cache: false,
 			
 			success : function(replies) {
@@ -328,7 +363,6 @@
 		
 	
 	});
-		
 	
 	
 	
@@ -420,8 +454,10 @@
 			<i class="fa fa-reply"></i>Submit
 		</button>
 	</div>
+	
 </div>
 <hr />
+<div id="children"></div>
 
 <ul id="bottom" class="list-unstyled">
 

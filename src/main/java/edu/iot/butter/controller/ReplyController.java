@@ -23,26 +23,25 @@ public class ReplyController {
 	public boolean insertReply(@RequestBody Reply reply) throws Exception {
 		// RequestBody : JSON인코딩을 해석해준다.
 		System.out.println(reply);
-		return service.create(reply, true);
+		return service.create(reply, true)==1;
 	}
 
 	@Transactional
 	@RequestMapping(value = "/addTop", method = RequestMethod.POST)
-	public boolean insertTopReply(@RequestBody Reply reply) throws Exception {
+	public Reply insertTopReply(@RequestBody Reply reply) throws Exception {
 		boolean replyHasParent;
-		boolean result = true;
+		int replyId;
 		// RequestBody : JSON인코딩을 해석해준다.
 		System.out.println(reply);
 		System.out.println("컨트롤러 동작");
 		
 		if(reply.getParentReply() != 0) {
-			result = service.create(reply, true);
+			replyId = service.create(reply, true);
 		}else {
-			result = service.create(reply, false);
-			
+			replyId = service.create(reply, false);
 		}
-		System.out.println(result);
-		return result;
+		service.getReply(replyId);
+		return reply;
 	}
 
 	@RequestMapping(value = "/{replyId}", method = RequestMethod.GET)

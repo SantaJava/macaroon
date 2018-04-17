@@ -22,7 +22,7 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Transactional
 	@Override
-	public boolean create(Reply reply, boolean hasParent) throws Exception {
+	public int create(Reply reply, boolean hasParent) throws Exception {
 		// hasParent를 통해 parentId가 있는지 없는지 파악한다.
 		System.out.println("create()호출");
 		boolean result;
@@ -32,7 +32,11 @@ public class ReplyServiceImpl implements ReplyService {
 		} else {
 			result = dao.insertTop(reply) == 1;
 		}
-		return result;
+		
+		// reply.getReplyId()
+		
+		
+		return reply.getReplyId();
 	}
 
 	@Transactional
@@ -63,7 +67,8 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public List<Reply> getReplyList(int replyId) throws Exception {
 		System.out.println(replyId);
-		List list = dao.selectChildList(replyId);
+		List<Reply>  list = dao.selectChildList(replyId);
+
 		return list;
 	}
 

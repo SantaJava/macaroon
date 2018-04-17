@@ -14,6 +14,7 @@ import edu.iot.butter.dao.ReplyDao;
 import edu.iot.butter.model.Attachment;
 import edu.iot.butter.model.Board;
 import edu.iot.butter.model.Pagination;
+import edu.iot.butter.model.Reply;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -48,6 +49,7 @@ public class BoardServiceImpl implements BoardService {
 		Board board = dao.selectOne(boardId); // 선택한 board반환.
 		board.setAttachments(attachmentDao.selectList(boardId));
 		board.setReplies(replyDao.selectTopList(boardId));// setAttachments.
+		
 		return board;
 	}
 	

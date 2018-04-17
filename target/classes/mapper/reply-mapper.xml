@@ -17,6 +17,7 @@
 		SELECT *
 		FROM replies
 		WHERE board_id=#{boardId}
+		ORDER BY reg_date DESC
 	</select>
 
 	<!-- 원댓글만 나오는 리스트 -->
@@ -24,6 +25,7 @@
 		SELECT *
 		FROM replies
 		WHERE board_id=#{boardId} and parent_reply is null
+		ORDER BY reg_date DESC
 	</select>
 
 	<!-- 댓글의 대댓글의 리스트를 추출 (재사용) -->
@@ -31,9 +33,11 @@
 		SELECT *
 		FROM replies
 		WHERE parent_reply=#{replyId}
+		ORDER BY reg_date DESC
 	</select>
 
-	<insert id="insertTop" parameterType="Reply">
+	<insert id="insertTop" parameterType="Reply" useGeneratedKeys="true"
+		keyColumn="reply_id" keyProperty="replyId">
 		insert into replies
 		(reply_id,
 		board_id, writer, content, reg_date, parent_reply, like_cnt,
