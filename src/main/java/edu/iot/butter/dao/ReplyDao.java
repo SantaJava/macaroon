@@ -14,6 +14,9 @@ public interface ReplyDao extends BaseDao<Reply, Integer> {
 	List<Reply> selectChildList(int replyId)throws Exception;
 	int deleteByUser(int replyId)throws Exception;
 	int increaseReplyCnt(int replyId)throws Exception;
+	
 	int increaseLikeCnt(int replyId)throws Exception;
+	int decreaseLikeCnt(int replyId)throws Exception;
 	int insertTop(Reply reply)throws Exception;
+	
 }

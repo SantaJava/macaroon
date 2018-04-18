@@ -20,7 +20,6 @@ font-family:'Playfair Display', bold,serif;
 margin-top: 15%;
 margin-left: 3%;
 font-size : 47px;
-
 }
 
 h2 p{
@@ -56,8 +55,7 @@ color : gray;
 
 
 .jumbotron h1 {
-	font-family: Palatino;
-	
+	font-family: Palatino;	
 }
 
 
@@ -77,6 +75,8 @@ color : gray;
 	color: #272727 !important;
 }
 
+
+
 .navbar-nav li a:hover, .navbar-brand:hover, .navbar-nav li.active a {
 	color: gray !important;
 }
@@ -85,6 +85,11 @@ color : gray;
 	border-color: transparent;
 	color: #272727 !important;
 }
+
+.navbar-toggler-icon{
+	color: black !important;
+	border-color: black;
+} 
 
 .btn-primary {
     background-color:black !important;
@@ -102,6 +107,9 @@ padding: 15px 25px;
 opacity: 0.8;
 }
 
+
+
+
 .adminList,.boardList, .mt-5 mb-4, .view  {
 background-color: white;
 width: 100%;
@@ -113,6 +121,16 @@ opacity: 0.8;
 }
 
 
+.boardContentCss{
+	
+background-color: #fff0fa;
+width: 97%;
+height: 90%;
+margin-left: 1%;
+border-radius : 5px;
+padding: 10px 10px;
+opacity: 1.0;
+	
 }
 
 

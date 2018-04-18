@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.iot.butter.dao.LikeDao">
+   <!-- 주석달기. CDATA안에는 sql문으로 인식. --><!--parcing 이 처리하지 못하게 막는것. -->
+
+   <select id="getCount" parameterType="Like" resultType="int">
+      SELECT count(*)
+      FROM likes
+      WHERE user_id = #{userId} and reply_id = #{replyId}
+   </select>
+
+
+   <insert id="insert" parameterType="Like">
+      insert into likes
+      (like_id, reply_id, user_id)
+      values (LIKES_SEQ.NEXTVAL, #{replyId}, #{userId}) 
+   </insert>
+
+
+   <delete id="delete" parameterType="Like">
+      DELETE FROM likes
+      WHERE user_id = #{userId} and reply_id = #{replyId}
+   </delete>
+
+
+</mapper>   

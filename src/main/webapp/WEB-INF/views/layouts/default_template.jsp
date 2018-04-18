@@ -39,7 +39,8 @@
 <body>
 	<div class="container">
 		<header> <tiles:insertAttribute name="header" /> </header>
-		<nav> <tiles:insertAttribute name="menu" /> </nav>
+		
+		<nav id="menu" class="navbar navbar-expand-lg navbar-light scrolling-navbar"> <tiles:insertAttribute name="menu" /> </nav>
 		<div>
 			<tiles:insertAttribute name="body" />
 		</div>

@@ -10,6 +10,51 @@
 var replyContent; //댓글 내용을 통해서 명시
 var replyContentTag; //태그 자체를 저장
 
+function formatDate(dateObj,format)
+{
+    var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+    var curr_date = dateObj.getDate();
+    var curr_month = dateObj.getMonth();
+    curr_month = curr_month + 1;
+    var curr_year = dateObj.getFullYear();
+    var curr_min = dateObj.getMinutes();
+    var curr_hr= dateObj.getHours();
+    var curr_sc= dateObj.getSeconds();
+    if(curr_month.toString().length == 1)
+    curr_month = '0' + curr_month;      
+    if(curr_date.toString().length == 1)
+    curr_date = '0' + curr_date;
+    if(curr_hr.toString().length == 1)
+    curr_hr = '0' + curr_hr;
+    if(curr_min.toString().length == 1)
+    curr_min = '0' + curr_min;
+    if(curr_sc.toString().length == 1)
+    curr_sc = '0' + curr_sc;
+
+    if(format ==1)//dd-mm-yyyy
+    {
+        return curr_date + "-"+curr_month+ "-"+curr_year;       
+    }
+    else if(format ==2)//yyyy-mm-dd
+    {
+        return curr_year + "-"+curr_month+ "-"+curr_date;       
+    }
+    else if(format ==3)//dd/mm/yyyy
+    {
+        return curr_date + "/"+curr_month+ "/"+curr_year;       
+    }
+    else if(format ==4)// MM/dd/yyyy HH:mm:ss
+    {
+        return curr_month+"/"+curr_date +"/"+curr_year+ " "+curr_hr+":"+curr_min+":"+curr_sc;       
+    }
+}
+
+
+
+
+
+
+
    $(function() {
       var api = "${root}reply/";   
    
@@ -35,17 +80,57 @@ var replyContentTag; //태그 자체를 저장
            var length = $(this).val().length;
            $(this).parent().find('.counter').html(length + " / 140");
        });
-      
-
-       var likeFlag = 'true';
+     
+       
+       
+       
+       
+       
+       //like count 매서드
+     //  var likeFlag = 'true';
        $('#bottom').on('click','.like', function(e){
           
           var parent = $(this).parent();
           var parent_id = parent.find('.likeCnt').data('id');
-          var count = $('.likeCnt[data-id="'+parent_id+'"]').text();
-          //alert("click me!");
           
-          if(likeFlag === 'false'){
+          var count = $('.likeCnt[data-id="'+parent_id+'"]').text();
+          
+          var like = {
+                  replyId : parent_id,
+                  userId : '${USER.userId}'             
+            };
+          
+          
+          $.ajax({
+              /*api 로 보낸다(위쪽) JSON으로 보낸다 (아래쪽)*/
+              
+              url : api + "likeUp",
+              type : 'post',
+              data : JSON.stringify(like),
+              contentType : 'application/json',
+              cache: false,             
+              success : function(result){                
+                 
+            	  
+            	  if(result ==1){
+            		  $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)+1);
+            		  
+            	  }
+            	  
+            	  if(result ==-1){
+            		  $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)-1);
+            	  }
+            	  if(result ==0){
+            		  console.log("likeCnt database error");
+            	  }
+            	  
+              }
+              
+           });             
+          
+         
+          
+        /*  if(likeFlag === 'false'){
              $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)-1);
           //   $('.like[data-id="'+parent_id+'"]').removeChild(a)
              likeFlag = 'true' 
@@ -54,10 +139,27 @@ var replyContentTag; //태그 자체를 저장
              $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)+1);
              
              var tag = ""; 
-             //"<i class = \"far fa-heart\"></i>"
-            // $('.like[data-id="'+parent_id+'"]').text(tag);
-             likeFlag = 'false';
+             likeFlag = 'false';*/
+             
+             
        });
+     
+      /* var ctx=1;      // 하트를 채우기 위한 flag 변수 선언 
+       function likeImgToggle(){            
+           alert("likeImgToggle 호출");
+
+           if(ctx%2==1) {
+              
+             $('#heartImg').removeClass("far fa-heart");
+             $('#heartImg').addClass("fas fa-heart");
+
+           }else{
+             $('#heartImg').removeClass("fas fa-heart");
+             $('#heartImg').addClass("far fa-heart");
+           }
+           ctx++;
+        } */
+       
        
        
       //서브 리플라이 추가하기 위한 텍스트창을 연다. - 여기서 submit까지 처리         
@@ -142,9 +244,11 @@ var replyContentTag; //태그 자체를 저장
                                       strc += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
                                       <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
                             }
-                                strc +=   `<span class="float-right">\${reply.regDate} &nbsp;&nbsp;<span data-id = "\${reply.replyId}" class = "likeCnt">   \${reply.likeCnt}</span> <a class = "like" data-id = "\${reply.replyId}" style="color: red"><i
-                                    class="far fa-heart"></i></a>
-                                    </span>
+                                strc +=   `<span class="float-right">\${reply.regDate} &nbsp;&nbsp; <span
+          							data-id="\${reply.replyId}" class="likeCnt">
+      								\${reply.likeCnt}</span> <a class="like" data-id="\${reply.replyId}"
+      							style="color: red"><i class="far fa-heart"></i></a>
+      						</span>
                                    </div>
                                    <div>`;
                             
@@ -214,6 +318,10 @@ var replyContentTag; //태그 자체를 저장
          
          success : function(reply){
               strc = "";
+              
+              var regDate = new Date(reply.regDate);
+              regDate = formatDate(regDate,4);
+              
                  strc += 
                     `<div class="media mt-4">
                       <img class =" d-flex mr-3" src="${root}member/avata/\${reply.writer}" width="100">
@@ -225,9 +333,11 @@ var replyContentTag; //태그 자체를 저장
                                       strc += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
                                       <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
                             }
-                                strc +=   `<span class="float-right">\${reply.regDate} &nbsp;&nbsp;<span data-id = "\${reply.replyId}" class = "likeCnt">   \${reply.likeCnt}</span> <a class = "like" data-id = "\${reply.replyId}" style="color: red"><i
-                                    class="far fa-heart"></i></a>
-                                    </span>
+                                strc +=   `<span class="float-right">\${regDate} &nbsp;&nbsp; <span
+          							data-id="\${reply.replyId}" class="likeCnt">
+      								\${reply.likeCnt}</span> <a class="like" data-id="\${reply.replyId}"
+      							style="color: red"><i class="far fa-heart"></i></a>
+      						</span>
                                    </div>
                                    <div>`;
                             
@@ -376,11 +486,16 @@ var replyContentTag; //태그 자체를 저장
                
          
                var str = "";
-          
+             
+               
                replies.forEach(function(reply, ix){ //forEach  첫번째 데이타가 데이터, 두번쨰가 인덱스, 세번째가 배열 자체.
                     console.log(reply);
-                    str += `<div class="media mt-4">
-                     <img class =" d-flex mr-3" src="${root}member/avata/\${reply.writer}" width="50">
+                    var regDate = new Date(reply.regDate);
+                    regDate = formatDate(regDate,4);     
+               
+               str += `<div class="media mt-4">
+                 
+                    <img class =" d-flex mr-3" src="${root}member/avata/\${reply.writer}" width="50">
                      <div class="media-body" data-id="\${reply.replyId}" >
                         <div class="reply-header">
                            <span class="mt-0 mb-1 font-weight-bold">\${reply.writer}</span>`; 
@@ -389,11 +504,11 @@ var replyContentTag; //태그 자체를 저장
                                     str += `<a class="deleteReply" data-id="\${reply.replyId}"><i class="fa fa-trash"></i></a>
                                     <a class="editReply" data-id="\${reply.replyId}"><i class="fa fa-edit"></i></a>`;
                            }
-                              str +=   `<span class="float-right">\${reply.regDate} &nbsp;&nbsp; <span
-                            data-id="\${reply.replyId}" class="likeCnt">
-                            ${reply.likeCnt}</span> <a class = "like" data-id = "\${reply.replyId}" style="color: red"><i
-                                  class="far fa-heart"></i></a>
-                                  </span>
+                              str +=   `<span class="float-right">\${regDate} &nbsp;&nbsp; <span
+        							data-id="\${reply.replyId}" class="likeCnt">
+    								\${reply.likeCnt}</span> <a class="like" data-id="\${reply.replyId}"
+    							style="color: red"><i class="far fa-heart"></i></a>
+    						</span>
                                  </div>
                                  <div>`;
                            
@@ -453,7 +568,9 @@ var replyContentTag; //태그 자체를 저장
 	</div>
 
 	<hr />
-	<div>${board.content}</div>
+	<div class="boardContentCss">${board.content}</div>
+	<hr />
+	comment
 
 	<div class="topTextArea">
 		<form class="caption-create1"
@@ -478,7 +595,7 @@ var replyContentTag; //태그 자체를 저장
 		<div id="children"></div>
 		<c:forEach var="reply" items="${board.replies}">
 			<fmt:formatDate value="${reply.regDate}"
-				pattern="yyyy-MM-dd hh:mm:ss" var="regDate" />
+				pattern="MM/dd/yyyy hh:mm:ss" var="regDate" />
 			<div class="media mt-4">
 				<img class=" d-flex mr-3" src="${root}member/avata/${reply.writer}"
 					width="100">
@@ -520,10 +637,6 @@ var replyContentTag; //태그 자체를 저장
 		</c:forEach>
 	</ul>
 
-
-	<button id="add">add</button>
-	<button id="edit">edit</button>
-	<button id="delete" data-target="5">delete</button>
 
 	<div class="text-center">
 		<c:if test="${board.writer == USER.userId}">

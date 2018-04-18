@@ -89,5 +89,13 @@
 		like_cnt = like_cnt + 1
 		WHERE reply_id=#{replyId}
 	</update>
+	
+		<!-- increaseLikeCount 좋아요를 누를 때마다 likecount +1 -->
+	<update id="decreaseLikeCnt" parameterType="int">
+		UPDATE replies SET
+		like_cnt = like_cnt - 1
+		WHERE reply_id=#{replyId}
+	</update>
+	
 
 </mapper>   

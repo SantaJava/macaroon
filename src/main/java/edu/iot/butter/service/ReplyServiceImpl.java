@@ -32,10 +32,9 @@ public class ReplyServiceImpl implements ReplyService {
 		} else {
 			result = dao.insertTop(reply) == 1;
 		}
-		
+
 		// reply.getReplyId()
-		
-		
+
 		return reply.getReplyId();
 	}
 
@@ -67,9 +66,22 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public List<Reply> getReplyList(int replyId) throws Exception {
 		System.out.println(replyId);
-		List<Reply>  list = dao.selectChildList(replyId);
+		List<Reply> list = dao.selectChildList(replyId);
 
 		return list;
+	}
+
+	// 라이크 주가본
+	@Transactional
+	@Override
+	public int increaseLikeCnt(int replyId) throws Exception {
+		return dao.increaseLikeCnt(replyId);
+	}
+
+	@Transactional
+	@Override
+	public int decreaseLikeCnt(int replyId) throws Exception {
+		return dao.decreaseLikeCnt(replyId);
 	}
 
 }

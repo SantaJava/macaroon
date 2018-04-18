@@ -12,4 +12,6 @@ public interface ReplyService {
    public boolean delete(Reply reply)throws Exception;
    public boolean delete(int boardId)throws Exception;
    int create(Reply reply, boolean hasParent) throws Exception;
+   public int increaseLikeCnt(int replyId) throws Exception;
+   public int decreaseLikeCnt(int replyId) throws Exception;
 }   

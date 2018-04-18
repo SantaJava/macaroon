@@ -1,5 +1,6 @@
 package edu.iot.butter.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,10 @@ public class ReplyController {
 	@Transactional
 	@RequestMapping(value = "/addTop", method = RequestMethod.POST)
 	public Reply insertTopReply(@RequestBody Reply reply) throws Exception {
-		boolean replyHasParent;
+		
+		reply.setRegDate(new Date());
+		
+		
 		int replyId;
 		// RequestBody : JSON인코딩을 해석해준다.
 		System.out.println(reply);
