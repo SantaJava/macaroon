@@ -53,9 +53,7 @@
 		<label>Writer : ${board.writer}</label>
 	</div>
 	<div class="md-form">
-		<label>password</label>
-		<form:password path="password" required="required" />
-		<form:errors />
+
 	</div>
 	<div class="row">
 		<div class="col-md-2">Attached File</div>

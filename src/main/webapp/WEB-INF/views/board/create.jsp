@@ -31,9 +31,6 @@
 			value="${USER.userId}" />
 	</div>
 	<div class="md-form">
-		<label>Password</label>
-		<form:password path="password" required="required" />
-		<form:errors path="password" />
 	</div>
 	<div>
 		<label>Attach Files</label> <input type="file" name="files" multiple="multiple" value ="Choose File">
