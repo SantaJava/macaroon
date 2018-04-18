@@ -33,9 +33,9 @@
 		keyColumn="board_id" keyProperty="boardId">
 		insert into boards
 		(board_id, title,
-		writer, password, read_cnt, reply_cnt, content,
+		writer, read_cnt, reply_cnt, content,
 		reg_date, update_date)
-		values(BOARDS_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, 0, 0,
+		values(BOARDS_SEQ.NEXTVAL, #{title}, #{writer}, 0, 0,
 		#{content}, sysdate, sysdate)
 	</insert>
 	<!--게시글 수정, 비밀번호를 아는 경우에 수정 가능 -->
@@ -46,7 +46,7 @@
 		content = #{content},
 		update_date = sysdate
 		WHERE
-		board_id=#{boardId} and password=#{password}
+		board_id=#{boardId} 
 	</update>
 
 	<!--게시글 조회수 증가 : 게시글 보기 할 때마다 호출 (select One하기 전에 호출해야한다.) -->
