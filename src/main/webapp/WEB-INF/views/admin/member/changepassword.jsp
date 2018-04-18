@@ -23,6 +23,7 @@
 
 	});
 </script>
+<body>
 <div id="password" class="password">
 
 	<title>change password</title>

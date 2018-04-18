@@ -32,69 +32,8 @@
 <!--JSTL-->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-
-<style>
-body{
-background-color : #FDF3D3;
-}
-
-.error {
-	color: red;
-}
-
-.jumbotron {
-	background-color: #800080;
-	color: #ffffff;
-	margin: 0;
-	border-radius: 0;
-}
-
-.jumbotron i {
-	color: #FFFF33;
-}
-
-.jumbotron h1 {
-	font-family: "Arial Rounded MT Bold", "Helvetica Rounded";
-	color: #FFFF33;
-}
-
-
-.navbar {
-	margin-bottom: 0;
-	background-color: #800080;
-	border: 0;
-	font-size: 15px;
-	line-height: 1.42857143;
-	letter-spacing: 4px;
-	border-radius: 0;
-}
-
-.navbar li a, .navbar .navbar-brand {
-	color: #fff !important;
-}
-
-.navbar-nav li a:hover, .navbar-brand:hover, .navbar-nav li.active a {
-	color: #FFFF33 !important;
-}
-
-.navbar-default .navbar-toggle {
-	border-color: transparent;
-	color: #FFFF33 !important;
-}
-
-.btn-primary {
-    background-color:  #800080 !important;
-}
-
-#reply_content{
-	resize : none;
-	background-color : white;
-	height : 100px;
-	border : none;
-	
-}
-
-</style>
+<link href="https://fonts.googleapis.com/css?family=Lato:400i,700,700i|Lora|Playfair+Display:400,700,700i" rel="stylesheet">
+ <link rel="stylesheet" href="/butter/resources/css/macaroon.css">
 
 </head>
 <body>

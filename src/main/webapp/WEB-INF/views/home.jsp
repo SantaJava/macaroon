@@ -3,15 +3,14 @@
 
 <title>Home</title>
 
-<div class="container text-center">
-	
-	<P class = "container text-right"> ${serverTime}.</P>
-<!--  	<div class="container text-center">
-		<img src="resources/images/butter.png" width="200px">
-	</div> -->
+<div class="home">
 
-
-	<div>
-		<img src="resources/images/Magnolia-Bakery.jpg" width="50%">
-	</div>
+	<h2>
+		ENJOY OUR BEAUTIFUL WEBSITE <br />WELCOME TO MACAROON,
+		<p>
+			WHERE WE SHARE IDEAS ABOUT BRIGHT THINGS. <br />
+			FOR MORE INFORMATION, CALL US
+		</p>
+	</h2>
 </div>
+

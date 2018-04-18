@@ -34,23 +34,19 @@
 
 
 <title>Insert title here</title>
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-md">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="${root}">MELISSA.G</a>
+			<a class="nav-item" href="${root}">HOME</a>
 
 		</div>
 		<ul class="nav navbar-nav navbar-right">
 			<li><c:if test="${empty USER}">
-					<li class="nav-item"><a href="${root}login"><i
-							class="fa fa-sign-in-alt"></i> Log-in | </a></li>
-					<li class="nav-item"><a href="${root}join"><i
-							class="fa fa-user"></i> Sign-in |</a></li>
-				</c:if><li class="nav-item"><a href="${root}gallery/lightbox"><i
-					class="fa fa-images"></i> Gallery |</a>
+					<li class="nav-item"><a href="${root}login"> Log-in | </a></li>
+					<li class="nav-item"><a href="${root}join">&nbsp;Sign-in |</a></li>
+				</c:if><li class="nav-item"><a href="${root}gallery/lightbox">&nbsp;Gallery |</a>
 			</li>
-				<li class="nav-item"><a href="${root}gallery/flickr"><i
-					class="fab fa-foursquare"></i> Flickr | </a> </li>
+				<li class="nav-item"><a href="${root}gallery/flickr">&nbsp;Flickr | </a> </li>
 				<c:if test="${not empty USER}">
 					<li class="nav-item"><a href="${root}member/profile"> <i
 						class="fa fa-user"></i> Profile |
@@ -65,8 +61,8 @@
 					Admin  |</a>
 					</li>
 				<li class = "nav item">
-					<a href= "${root}board/list"><i class = "fa fa-list"></i>
-					List </a>
+					<a href= "${root}board/list">
+					&nbsp;List </a>
 					</li>
 				</ul>
 		</div>

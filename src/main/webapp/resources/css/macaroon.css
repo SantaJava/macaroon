@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+body{
+
+background-image: url("/butter/resources/images/macaroon.jpg");
+background-repeat: repeat-y; ;
+background-width: 100%;
+}
+
+h1{
+font-family:'Playfair Display', bold;
+ letter-spacing : 9px;
+ margin-top: 35px;
+ margin-botton: 30px;
+ color: '#272727';
+}
+
+.home h2{
+font-family:'Playfair Display', bold,serif;
+margin-top: 15%;
+margin-left: 3%;
+font-size : 47px;
+
+}
+
+h2 p{
+font-family:'Tahoma, sans-serif';
+margin-top: 10px;
+font-size : 18px;
+
+}
+
+h4{
+font-family:font-family: 'Lora', serif;
+font-size : 25px;
+margin-left : 15px;
+margin-top : 10px;
+color : darkgray;
+}
+
+h2{
+font-family:'Playfair Display',serif;
+margin-top: 6%;
+color: gray;
+}
+
+.footer{
+margin-top: 10%;
+color : gray;
+}
+
+.error {
+	color: red;
+}
+
+
+
+.jumbotron h1 {
+	font-family: Palatino;
+	
+}
+
+
+.navbar {
+	margin-top: 40px;
+	margin-bottom: 0;
+	background-color: white;
+	border: 0;
+	font-size: 14px;
+	line-height: 1.8;
+
+	letter-spacing: 4px;
+	border-radius: 0;
+}
+
+
+.navbar li a, .navbar .navbar-brand {
+	color: #272727 !important;
+}
+
+.navbar-nav li a:hover, .navbar-brand:hover, .navbar-nav li.active a {
+	color: gray !important;
+}
+
+.navbar-default .navbar-toggle {
+	border-color: transparent;
+	color: #272727 !important;
+}
+
+.btn-primary {
+    background-color:black !important;
+    color : white;  
+}
+
+.loginBack, .joinBack, .profile-form,.password, .mt-5 mb-4{
+background-color: white;
+width: 80%;
+height: 100%;
+margin-left : 10%;
+margin-top : 10%;
+border-radius : 5px;
+padding: 15px 25px;
+opacity: 0.8;
+}
+
+.adminList,.boardList, .mt-5 mb-4, .view  {
+background-color: white;
+width: 100%;
+height: 100%;
+margin-top : 10%;
+border-radius : 5px;
+padding: 25px 25px;
+opacity: 0.8;
+}
+
+
+}
+
+
+
+.addSubReply{
+	background-color: pink !important;
+}
+
+#reply_content{
+	resize : none;
+	background-color : white;
+	height : 100px;
+	border : none;	
+}

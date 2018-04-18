@@ -3,7 +3,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<div class = "boardList">
 <h2 class="mt-5 mb-4">Discussions</h2>
 <div class="text-right">
 	(total : ${pagination.totalCount} / <c:if test ="${not empty USER}"><a href="create"></c:if><i
@@ -35,3 +35,4 @@
 
 <%@ taglib tagdir="/WEB-INF/tags/util" prefix="iot"%>
 <iot:pagination pagination="${pagination}" link="list" />
+</div>

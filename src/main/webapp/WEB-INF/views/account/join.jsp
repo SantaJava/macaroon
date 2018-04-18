@@ -32,47 +32,51 @@
 				})
 	});
 </script>
-
 <body>
-	<h2>JOIN THE BUTTER</h2>
-	<form:form commandName="member">
-		<p>
-			User Id
-			<form:input path="userId" value="${member.userId}" />
-			<form:errors path="userId" element="div" cssClass="error" />
-		</p>
-		<button class="btn btn-primary btn-sm" id="check-btn">Check
-			User Id</button>
-		<p>
-			<span id="check-message"></span> Name
-			<form:input path="name" value="${member.name}" />
-			<form:errors path="name" element="div" cssClass="error" />
-		</p>
-		<p>
-			Password
-			<form:password path="password" value="" />
-			<form:errors path="password" element="div" cssClass="error" />
-		</p>
-		<p>
-			Cell Phone Number
-			<form:input path="cellPhone" value="${member.cellPhone}" />
-			<form:errors path="cellPhone" element="div" cssClass="error" />
-		</p>
-		<p>
-			email
-			<form:input path="email" value="${member.email}" />
-			<form:errors path="email" element="div" cssClass="error" />
-		</p>
-		<p>
-			Address
-			<form:input path="address" value="${member.address}" />
-			<form:errors path="address" element="div" cssClass="error" />
-		</p>
-		<p>
-			Picture
-			<form:input path="profilePic" value="${member.profilePic}" />
-		</p>
-		<input type="submit" value="Submit" class="btn btn-primary btn-md">
-	</form:form>
+	<div class="joinBack">
+		<h2>
+			<i class="fas fa-user-circle"></i> &nbsp;JOIN THE MACAROON
+		</h2>
+		<hr />
+		<form:form commandName="member">
+			<p>
+				User Id
+				<form:input path="userId" value="${member.userId}" />
+				<form:errors path="userId" element="div" cssClass="error" />
+			</p>
+			<button class="btn btn-primary btn-sm" id="check-btn">Check
+				User Id</button>
+			<p>
+				<span id="check-message"></span> Name
+				<form:input path="name" value="${member.name}" />
+				<form:errors path="name" element="div" cssClass="error" />
+			</p>
+			<p>
+				Password
+				<form:password path="password" value="" />
+				<form:errors path="password" element="div" cssClass="error" />
+			</p>
+			<p>
+				Cell Phone Number
+				<form:input path="cellPhone" value="${member.cellPhone}" />
+				<form:errors path="cellPhone" element="div" cssClass="error" />
+			</p>
+			<p>
+				email
+				<form:input path="email" value="${member.email}" />
+				<form:errors path="email" element="div" cssClass="error" />
+			</p>
+			<p>
+				Address
+				<form:input path="address" value="${member.address}" />
+				<form:errors path="address" element="div" cssClass="error" />
+			</p>
+			<p>
+				Picture
+				<form:input path="profilePic" value="${member.profilePic}" />
+			</p>
+			<input type="submit" value="Submit" class="btn btn-primary btn-md">
+		</form:form>
+	</div>
 </body>
 </html>

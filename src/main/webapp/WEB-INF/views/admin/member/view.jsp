@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<body>
 <div class="profile-form">
 	<div class="md-offset-4 mt-4 md-4">
 		<h1 class="profile"><span style = "color:#272727;">${member.userId} </span><span style = "color:#d09cd9;">'s Profile</span></h1>
@@ -54,3 +54,4 @@
 		</div>
 	</div>
 </div>
+</body>

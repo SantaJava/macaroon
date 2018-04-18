@@ -15,19 +15,18 @@
 		});
 	})
 </script>
-<h3 class="mt-5 mb-4">Do you want to delete this document?</h3>
-<form:form commandName="board">
-	<form:hidden path="boardId" />
-	<form:hidden path="writer" />
-	<form:hidden path="title" />
-	<form:errors path="title" />
+<div class="delete">
+	<h3 class="mt-5 mb-4">Do you want to delete this document?</h3>
+	<form:form commandName="board">
+		<form:hidden path="boardId" />
+		<form:hidden path="writer" />
+		<form:hidden path="title" />
+		<form:errors path="title" />
 
-	<div class="md-form">
-		Title : ${board.title}
-	</div>
+		<div class="md-form">Title : ${board.title}</div>
 
 
-<!-- 	<div class="md-form">
+		<!-- 	<div class="md-form">
 		<label>Title</label>
 		<form:input path="title" required="required" />
 		<form:errors path="title" />
@@ -38,31 +37,32 @@
 -->
 
 
-	<div class="md-form">
-		<label>Please Type in your Password</label>
-		<form:password path="password" required="required" />
-		<form:errors />
-	</div>
-
-	<div class="row">
-		<div class="col-md-2">Attached File</div>
-		<div class="col-md-10">
-			<c:forEach var="file" items="${board.attachments}">
-				<div>
-					<i class="fa fa-file"></i> ${file.fileName} <a href="#"
-						data-target="${file.attachmentId}"> </a>
-				</div>
-			</c:forEach>
+		<div class="md-form">
+			<label>Please Type in your Password</label>
+			<form:password path="password" required="required" />
+			<form:errors />
 		</div>
-	</div>
-	<div class="col-md-2">Content</div>
-	<form:textarea path="content" />
-	<div class="text-center mt-3">
-		<button type="submit" class="btn btn-primary btn-md">
-			<i class="fa fa-check mr-2"></i> YES
-		</button>
-		<a href="javascript:history.back()" class="btn btn-primary btn-md">
-			<i class="fa fa-undo mr-2"></i> NO
-		</a>
-	</div>
-</form:form>
+
+		<div class="row">
+			<div class="col-md-2">Attached File</div>
+			<div class="col-md-10">
+				<c:forEach var="file" items="${board.attachments}">
+					<div>
+						<i class="fa fa-file"></i> ${file.fileName} <a href="#"
+							data-target="${file.attachmentId}"> </a>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+		<div class="col-md-2">Content</div>
+		<form:textarea path="content" />
+		<div class="text-center mt-3">
+			<button type="submit" class="btn btn-primary btn-md">
+				<i class="fa fa-check mr-2"></i> YES
+			</button>
+			<a href="javascript:history.back()" class="btn btn-primary btn-md">
+				<i class="fa fa-undo mr-2"></i> NO
+			</a>
+		</div>
+	</form:form>
+</div>
