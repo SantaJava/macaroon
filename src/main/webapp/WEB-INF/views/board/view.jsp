@@ -114,11 +114,12 @@ function formatDate(dateObj,format)
             	  
             	  if(result ==1){
             		  $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)+1);
-            		  
+            		  $('.like[data-id="'+parent_id+'"]').html('<i class = "fas fa-heart"></i>')
             	  }
             	  
             	  if(result ==-1){
             		  $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)-1);
+            		  $('.like[data-id="'+parent_id+'"]').html('<i class = "far fa-heart"></i>')
             	  }
             	  if(result ==0){
             		  console.log("likeCnt database error");
@@ -128,7 +129,8 @@ function formatDate(dateObj,format)
               
            });             
           
-         
+          /*<a class="like" data-id="${reply.replyId}"
+				style="color: red"><i class="far fa-heart"></i></a>*/
           
         /*  if(likeFlag === 'false'){
              $('.likeCnt[data-id="'+parent_id+'"]').text(parseInt(count)-1);
@@ -595,7 +597,8 @@ function formatDate(dateObj,format)
 		<div id="children"></div>
 		<c:forEach var="reply" items="${board.replies}">
 			<fmt:formatDate value="${reply.regDate}"
-				pattern="MM/dd/yyyy hh:mm:ss" var="regDate" />
+		 
+			pattern="MM/dd/yyyy hh:mm:ss" var="regDate" />
 			<div class="media mt-4">
 				<img class=" d-flex mr-3" src="${root}member/avata/${reply.writer}"
 					width="100">
@@ -609,10 +612,24 @@ function formatDate(dateObj,format)
 							<a class="editReply" data-id="${reply.replyId}"><i
 								class="fa fa-edit"></i></a>
 						</c:if>
-						<span class="float-right">${regDate} &nbsp;&nbsp; <span
-							data-id="${reply.replyId}" class="likeCnt">
-								${reply.likeCnt}</span> <a class="like" data-id="${reply.replyId}"
+						<span class="float-right">${regDate} &nbsp;&nbsp; 
+						
+						
+						
+						<span data-id="${reply.replyId}" class="likeCnt">
+								${reply.likeCnt}</span> 
+								
+							<c:choose>	
+								<c:when test= "">
+								<a class="like" data-id="${reply.replyId}"
+							style="color: red"><i class="fas fa-heart"></i></a>
+							</c:when>
+							<c:otherwise>
+								<a class="like" data-id="${reply.replyId}"
 							style="color: red"><i class="far fa-heart"></i></a>
+							</c:otherwise>
+							</c:choose>
+							
 						</span>
 					</div>
 					<c:choose>

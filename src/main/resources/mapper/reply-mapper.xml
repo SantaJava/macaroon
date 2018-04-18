@@ -11,6 +11,8 @@
 		FROM replies
 		WHERE reply_id=#{replyId}
 	</select>
+	
+
 
 	<!-- 대댓글까지 전부다 나오는 것 리스트 -->
 	<select id="selectList" parameterType="int" resultType="Reply">
