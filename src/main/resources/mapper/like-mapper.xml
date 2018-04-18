@@ -7,6 +7,8 @@
 	<!-- 주석달기. CDATA안에는 sql문으로 인식. --><!--parcing 이 처리하지 못하게 막는것. -->
 
 
+
+
 	<select id="getCount" parameterType="Like" resultType="int">
 		SELECT count(*)
 		FROM likes

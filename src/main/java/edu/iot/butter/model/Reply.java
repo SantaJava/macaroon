@@ -22,5 +22,6 @@ public class Reply {
 	private int likeCnt;
 	private int replyCnt;
 	private List<Reply> replies;
+	private boolean clickedHeart;
 }
 

@@ -618,18 +618,12 @@ function formatDate(dateObj,format)
 						
 						<span data-id="${reply.replyId}" class="likeCnt">
 								${reply.likeCnt}</span> 
-								
-							<c:choose>	
-								<c:when test= "">
-								<a class="like" data-id="${reply.replyId}"
-							style="color: red"><i class="fas fa-heart"></i></a>
-							</c:when>
-							<c:otherwise>
+					
 								<a class="like" data-id="${reply.replyId}"
 							style="color: red"><i class="far fa-heart"></i></a>
-							</c:otherwise>
-							</c:choose>
-							
+				
+
+
 						</span>
 					</div>
 					<c:choose>

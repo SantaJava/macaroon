@@ -31,8 +31,7 @@ public class ReplyController {
 	@RequestMapping(value = "/addTop", method = RequestMethod.POST)
 	public Reply insertTopReply(@RequestBody Reply reply) throws Exception {
 		
-		reply.setRegDate(new Date());
-		
+		reply.setRegDate(new Date());	
 		
 		int replyId;
 		// RequestBody : JSON인코딩을 해석해준다.
